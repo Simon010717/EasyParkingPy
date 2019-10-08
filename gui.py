@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:/Users/Simon/Desktop/Easy/login.ui'
+# Form implementation generated from reading ui file 'C:/Users/Simon/Desktop/EasyParkingPy/login.ui'
 #
 # Created by: PyQt5 UI code generator 5.13.0
 #
@@ -13,10 +13,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(532, 460)
+        MainWindow.resize(531, 460)
         MainWindow.setStyleSheet("*{\n"
 "font-family: segoe ui;\n"
-"font-size: 30px;\n"
+"}\n"
+"QLabel{\n"
+"font-size: 15px;\n"
+"color: white;\n"
 "}\n"
 "QFrame{\n"
 "background: #444;\n"
@@ -25,6 +28,7 @@ class Ui_MainWindow(object):
 "color: #444;\n"
 "border-radius: 15px;\n"
 "background:white;\n"
+"font-size: 30px;\n"
 "}\n"
 "QToolButton{\n"
 "background: transparent;\n"
@@ -42,6 +46,7 @@ class Ui_MainWindow(object):
 "border: none;\n"
 "border-bottom: 1px solid;\n"
 "border-color: #717072;\n"
+"font-size: 30px;\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -50,15 +55,17 @@ class Ui_MainWindow(object):
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
-        self.lineEdit = QtWidgets.QLineEdit(self.frame_2)
-        self.lineEdit.setGeometry(QtCore.QRect(30, 290, 461, 61))
-        self.lineEdit.setEchoMode(QtWidgets.QLineEdit.PasswordEchoOnEdit)
-        self.lineEdit.setCursorPosition(0)
-        self.lineEdit.setObjectName("lineEdit")
-        self.lineEdit_2 = QtWidgets.QLineEdit(self.frame_2)
-        self.lineEdit_2.setGeometry(QtCore.QRect(30, 210, 461, 61))
-        self.lineEdit_2.setCursorPosition(0)
-        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.usernameLine = QtWidgets.QLineEdit(self.frame_2)
+        self.usernameLine.setGeometry(QtCore.QRect(40, 310, 461, 61))
+        self.usernameLine.setText("")
+        self.usernameLine.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.usernameLine.setCursorPosition(0)
+        self.usernameLine.setObjectName("usernameLine")
+        self.passwordLine = QtWidgets.QLineEdit(self.frame_2)
+        self.passwordLine.setGeometry(QtCore.QRect(40, 220, 461, 61))
+        self.passwordLine.setText("")
+        self.passwordLine.setCursorPosition(0)
+        self.passwordLine.setObjectName("passwordLine")
         self.registerButton = QtWidgets.QPushButton(self.frame_2)
         self.registerButton.setGeometry(QtCore.QRect(290, 380, 181, 51))
         self.registerButton.setObjectName("registerButton")
@@ -66,11 +73,17 @@ class Ui_MainWindow(object):
         self.loginButton.setGeometry(QtCore.QRect(50, 380, 181, 51))
         self.loginButton.setObjectName("loginButton")
         self.label = QtWidgets.QLabel(self.frame_2)
-        self.label.setGeometry(QtCore.QRect(70, 20, 401, 171))
+        self.label.setGeometry(QtCore.QRect(70, 0, 381, 171))
         self.label.setStyleSheet("")
         self.label.setText("")
         self.label.setPixmap(QtGui.QPixmap("easy_blanco.svg"))
         self.label.setObjectName("label")
+        self.usernameLabel = QtWidgets.QLabel(self.frame_2)
+        self.usernameLabel.setGeometry(QtCore.QRect(40, 201, 191, 20))
+        self.usernameLabel.setObjectName("usernameLabel")
+        self.passwordLabel = QtWidgets.QLabel(self.frame_2)
+        self.passwordLabel.setGeometry(QtCore.QRect(40, 291, 191, 20))
+        self.passwordLabel.setObjectName("passwordLabel")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -81,6 +94,8 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.registerButton.setText(_translate("MainWindow", "Register"))
         self.loginButton.setText(_translate("MainWindow", "Login"))
+        self.usernameLabel.setText(_translate("MainWindow", "Usuario"))
+        self.passwordLabel.setText(_translate("MainWindow", "Contraseña"))
 import logo
 
 

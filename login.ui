@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>532</width>
+    <width>531</width>
     <height>460</height>
    </rect>
   </property>
@@ -16,7 +16,10 @@
   <property name="styleSheet">
    <string notr="true">*{
 font-family: segoe ui;
-font-size: 30px;
+}
+QLabel{
+font-size: 15px;
+color: white;
 }
 QFrame{
 background: #444;
@@ -25,6 +28,7 @@ QPushButton{
 color: #444;
 border-radius: 15px;
 background:white;
+font-size: 30px;
 }
 QToolButton{
 background: transparent;
@@ -42,6 +46,7 @@ color: #717072;
 border: none;
 border-bottom: 1px solid;
 border-color: #717072;
+font-size: 30px;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -60,36 +65,36 @@ border-color: #717072;
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QLineEdit" name="usernameLine">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>290</y>
+       <x>40</x>
+       <y>310</y>
        <width>461</width>
        <height>61</height>
       </rect>
      </property>
      <property name="text">
-      <string>password</string>
+      <string/>
      </property>
      <property name="echoMode">
-      <enum>QLineEdit::PasswordEchoOnEdit</enum>
+      <enum>QLineEdit::Password</enum>
      </property>
      <property name="cursorPosition">
       <number>0</number>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_2">
+    <widget class="QLineEdit" name="passwordLine">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>210</y>
+       <x>40</x>
+       <y>220</y>
        <width>461</width>
        <height>61</height>
       </rect>
      </property>
      <property name="text">
-      <string>username</string>
+      <string/>
      </property>
      <property name="cursorPosition">
       <number>0</number>
@@ -125,8 +130,8 @@ border-color: #717072;
      <property name="geometry">
       <rect>
        <x>70</x>
-       <y>20</y>
-       <width>401</width>
+       <y>0</y>
+       <width>381</width>
        <height>171</height>
       </rect>
      </property>
@@ -137,7 +142,33 @@ border-color: #717072;
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="logo.qrc">:/logo/easy_blanco.svg</pixmap>
+      <pixmap resource="logo.qrc">:/easy_blanco.svg</pixmap>
+     </property>
+    </widget>
+    <widget class="QLabel" name="usernameLabel">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>201</y>
+       <width>191</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Usuario</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="passwordLabel">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>291</y>
+       <width>191</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Contraseña</string>
      </property>
     </widget>
    </widget>
