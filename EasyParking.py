@@ -25,7 +25,7 @@ class Usuario(Persona):
         super().__init__(ced, nickname, password, nombre, apellido, edad, email, direccion, tel)
 
 class Espacio:
-    def __init__ (self,cod,hora_incio = None,libre = True,carro = None):
+    def __init__ (self,cod,hora_incio = None,carro = None,libre = True):
         self.cod = cod
         self.hora_incio = hora_incio
         self.libre = libre
@@ -55,8 +55,11 @@ class EasyParking:
                 if data[l][b] == '1': ocupados.append(b)
             l += 1
             for p in ocupados:
-                info = data[l].split('*')
-                info[1] = info[1].rstrip('\n')
+                info = [p]
+                info = info + data[l].split('*')
+                info[1] = int(info[1])
+                info[2] = int(info[2].rstrip('\n'))
+                self.parqueaderos[i].parqueo(info,True)
                 self.parqueaderos[i].espacios[p] = Espacio(l-2,info[0],self.buscarUsuario(info[1]).carro,False)
                 l+=1
     
@@ -146,33 +149,16 @@ class Parqueadero:
         self.direccion = direccion
         self.tel = tel
         self.gerente = gerente
-            
 
     def addEspacio(self):
-        self.espacios.append(Espacio(self.espaciosTotales+1))
-    
-    def puestosVacios(self):
-        return self.espaciosTotales - len(self.espacios)
-    
-    def nextLibre(self):
-        if(len(self.espacios) < totales):
-            if(len(self.espacios) == 0): 
-                return 0
-            elif (self.espacios[len(self.espacios)-1].numero < espaciosTotales-1):
-                return self.espacios[len(self.espacios)-1].numero
-            else:
-                for i in range(len(self.espacios)-1):
-                    if(espacios[i].numero != i):
-                        return espacios[i-1].numero +1
-        return -1
-    
-    def parqueo(self, user):
-        if(len(self.espacios) < self.espaciosTotales and user.carro.enParqueo):
-            nextLibre = nextLibre()
-            self.espacios.append(Espacio(nextLibre))
-            self.espacios[len(self.espacios)-1].llenar(user)
-        else:
-            print("Parqueadero ocupado")
+        self.espacios.append(Espacio(self.espaciosTotales+1))   
+
+    def parqueo(self,info,verified):
+        carro = self.buscarUsuario(info[2])
+        if not verified and carro is None: return False
+        self.espacios[info[0]] = Espacio(info[0],info[1],carro,False)
+        self.espaciosTree.insert(info[0])
+        
 
     def desparqueo(self,user: Usuario):
         for i in range(len(self.espacios)): #puede ser mejorable guardando el espacio en el carro
@@ -200,11 +186,26 @@ class Test:
 
 
 def main():
-    ep = EasyParking()
-    info = ["0000011111","nona","passa","angela","houston","26","tyh529"]
-    ep.addUsuarioArr(info,False)
-    info = ["apestas","12345","aval","123456","tomas","5","0"]
-    ep.addParqueadero(info,False)
+    n = 1000
+    avl = dt.AvlTree()
+    st = time.time()
+    for i in range(1,n+1):
+        siguiente = avl.siguiente(i,n)        
+        if siguiente is not None:
+            avl.root = avl.insert(avl.siguiente(i,n),avl.root)
+        else:
+            k = n-1
+            while avl.contains(k,avl.root):
+                k -= 1
+            avl.insert(k,avl.root)
+
+    print()
+    print(avl.root.data)
+    print(avl.findMax(avl.root))
+    print(avl.findMin(avl.root))
+    print(avl.x)
+    for i in range(n):
+        if not avl.contains(i,avl.root): print(i,end = ':')
 
 
 

@@ -136,7 +136,7 @@ class BinarySearchTree:
     def contains(self,x,t):
         if t is None: return False
         if x == t.data: return True
-        if x < t.data: return self.contains(x,t.right)
+        if x > t.data: return self.contains(x,t.right)
         if x < t.data: return self.contains(x,t.left)
 
     def remove(self,x,t):
@@ -154,17 +154,24 @@ class BinarySearchTree:
     
     def findMin(self,t):
         if t.left is None: return t.data
-        else: return findMin(t.left)
+        else: return self.findMin(t.left)
 
     def findMax(self,t):
         if t.right is None: return t.data
-        else: return findMax(t.right)
+        else: return self.findMax(t.right)
 
     def height(self,t):
+        if t is None: return 0
         if t.left is None and t.right is None: return 1
         elif t.left is None: return self.height(t.right)+1
         elif t.right is None: return self.height(t.left)+1
         else: return max(self.height(t.right),self.height(t.left))
+
+    def inOrder(self,t):
+        if t is None: return 
+        if t.left is not None: self.inOrder(t.left)
+        print(t.data,end = ',')
+        if t.right is not None: self.inOrder(t.right)
     
 class AvlTree(BinarySearchTree):
 
@@ -172,11 +179,12 @@ class AvlTree(BinarySearchTree):
         def __init__(self):
             self.data = None
             self.left = None
-            self.right = False
-            height = 0
+            self.right = None
+            self.height = 0
 
     def __init__(self):
         self.root = None
+        self.x = 0
     
     def singleRotationR(self,t):
         temp = t.left
@@ -204,21 +212,23 @@ class AvlTree(BinarySearchTree):
 
     def insert(self, x, t):
         if t is None:
-            t = AvlTree()
+            t = self.AvlNode()
             t.data = x
             t.height = 1
-        if x == t.data: return t
+            self.x += 1
+        if x == t.data:
+            return t
         elif x < t.data:
-            t.left =  self.insert(x.t.left)
+            t.left =  self.insert(x,t.left)
             if super().height(t.left) - super().height(t.right) == 2:
-                if x < t.data: t = self.singleRotationR(t)
+                if x < t.left.data: t = self.singleRotationR(t)
                 else: t = self.rotationLR(t)
         elif x > t.data: 
             t.right = self.insert(x,t.right)
             if super().height(t.right) - super().height(t.left) == 2:
-                if t.left.data > x: t = self.singleRotationL(t)
+                if x >  t.right.data: t = self.singleRotationL(t)
                 else: t = self.rotationRL(t)
-        t.height = max(super().height(t.left),super().height) + 1
+        t.height = max(super().height(t.left),super().height(t.right)) + 1
         return t
     
     def remove(self,x,t):
@@ -244,6 +254,18 @@ class AvlTree(BinarySearchTree):
         t.height = max(super().height(t.left),super().height) + 1
         return t
 
-        
+    def siguiente(self,x,n):
+        if x<1 or x>n: return None
+        s = 0
+        k = 0
+        while s + pow(2,k) < x:
+            s += pow(2,k)  
+            k+=1
+        if not self.contains(int(n*(2*(x-s)-1)/pow(2,k+1)),self.root):
+            return int(n*(2*(x-s)-1)/pow(2,k+1))
+        else:
+            return self.siguiente(x-1,n)
+
+            
         
         
