@@ -85,6 +85,7 @@ class EasyParking:
             data = f.readlines()
         
         for line in data:
+            line = line.rstrip('\n')
             self.addUsuarioArr(line.split("*"),True)
 
     def addUsuarioArr(self,info,verified):

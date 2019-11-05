@@ -15,7 +15,7 @@ class LinearList:
         return front.data
     
     def get (self, index):
-        if (index >= size or index<0): return None
+        if index >= size or index<0: return None
         currentNode = self.head
         for i in range (index):
             currentNode = currentNode.next
@@ -33,9 +33,9 @@ class LinearList:
             return index
     
     def remove(self,index):
-        if (index >= size or index<0): return None
+        if index >= size or index<0: return None
         removed = None
-        if(index == 0):
+        if index == 0:
             removed = self.head.data
             self.head = self.head.next
         else:
@@ -47,8 +47,8 @@ class LinearList:
         return removed
     
     def add(self, index, data):
-        if(index<0 or index>size): return None
-        if(index == 0): self.head = ListNode(data,self.head)
+        if index<0 or index>size: return None
+        if index == 0: self.head = ListNode(data,self.head)
         else:
             q = self.head
             for i in range(index-1): q = q.next
@@ -102,11 +102,11 @@ class Queue():
         else: self.back.next = q
         self.back  = q
 
-    def remove(self):
-        if (self.isEmpty()): return None
+    def dequeue(self):
+        if self.isEmpty(): return None
         frontData = self.front.data
         self.front = self.front.next
-        if (self.isEmpty()): self.back = None
+        if self.isEmpty(): self.back = None
         return frontData
     
 class BinarySearchTree:
@@ -147,10 +147,8 @@ class BinarySearchTree:
             t.data = self.findMax(t.right)
             r.right = t.remove(t.data,t.right)
         else:
-            if t.left is None:
-                return t.right
-            else:
-                return t.left
+            if t.left is None: return t.right
+            else: return t.left
     
     def findMin(self,t):
         if t.left is None: return t.data
