@@ -46,15 +46,12 @@ class EasyParking:
         for i in range(n):
             with open(self.parqueaderosRoute+"/p"+str(i),"r") as f:
                 data = f.readlines()
-            l = 0
-            data[l] = data[l].rstrip('\n')
-            self.addParqueadero(data[l].split('*'),True)
-            l += 1
+            data[0] = data[0].rstrip('\n')
+            self.addParqueadero(data[0].split('*'),True)
             ocupados = []
-            for b in range (len(data[l])):
-                if data[l][b] == '1': ocupados.append(b)
-            l += 1
-            for p in ocupados:
+            for b in range (len(data[1])):
+                if data[1][b] == '1': ocupados.append(b)
+            for l, p in enumerate(ocupados,start=2):
                 info = [p]
                 info = info + data[l].split('*')
                 info[1] = int(info[1])
