@@ -51,18 +51,21 @@ class EasyParking:
             ocupados = []
             for b in range (len(data[1])):
                 if data[1][b] == '1': ocupados.append(b)
-            for l, p in enumerate(ocupados,start=2):
-                info = [p]
+            l = 2
+            for p in ocupados:
+                info = []
                 info = info + data[l].split('*')
-                info[1] = int(info[1])
-                info[2] = int(info[2].rstrip('\n'))
-                self.parqueaderos[i].parqueo(info,True)
-                self.parqueaderos[i].espacios[p] = Espacio(l-2,info[0],self.buscarUsuario(info[1]).carro,False)
+                info[0] = info[0]
+                info[1] = info[1].rstrip('\n')
+                if self.buscarUsuario(info[1]) is not None:
+                    self.parqueaderos[i].espacios[p] = Espacio(p,info[0],self.buscarUsuario(info[1]).carro,False)
+                    self.parqueaderos[i].espaciosTree.root = self.parqueaderos[i].espaciosTree.insert(p,self.parqueaderos[i].espaciosTree.root)
                 l+=1
     
     def buscarUsuario(self,ced):
         for u in self.usuarios:
-            if ced == u.ced: return u
+            if ced == u.ced:
+                return u
         return None
         
     def addParqueadero(self,info,verified):
@@ -72,7 +75,6 @@ class EasyParking:
             data = []
             data.append('*'.join(info)+'\n')
             data.append("0"*(int(info[5])-int(info[6])))
-            print(data)
             with open(self.parqueaderosRoute+"/p"+str(len(self.parqueaderos)),"w") as f:
                 f.writelines(data)
         self.parqueaderos.append(Parqueadero(info[0],info[1],info[2],info[3],info[4],int(info[5]),int(info[6])))
@@ -100,7 +102,7 @@ class EasyParking:
         
         if not verified:
             with open(self.usuariosRoute,"a") as f:
-                if self.usuarios > 1: f.write('\n')
+                if len(self.usuarios) > 1: f.write('\n')
                 f.writelines(line)
 
         return 3
@@ -150,12 +152,6 @@ class Parqueadero:
 
     def addEspacio(self):
         self.espacios.append(Espacio(self.espaciosTotales+1))   
-
-    def parqueo(self,info,verified):
-        carro = self.buscarUsuario(info[2])
-        if not verified and carro is None: return False
-        self.espacios[info[0]] = Espacio(info[0],info[1],carro,False)
-        self.espaciosTree.insert(info[0])
         
 
     def desparqueo(self,user: Usuario):
@@ -208,7 +204,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    #main()
+    ep = EasyParking()
 
 
     

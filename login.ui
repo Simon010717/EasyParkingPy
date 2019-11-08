@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>531</width>
-    <height>460</height>
+    <height>456</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,6 +69,28 @@ font-size: 30px;
      <property name="geometry">
       <rect>
        <x>40</x>
+       <y>220</y>
+       <width>461</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::DefaultContextMenu</enum>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::PasswordEchoOnEdit</enum>
+     </property>
+     <property name="cursorPosition">
+      <number>0</number>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="passwordLine">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
        <y>310</y>
        <width>461</width>
        <height>61</height>
@@ -79,22 +101,6 @@ font-size: 30px;
      </property>
      <property name="echoMode">
       <enum>QLineEdit::Password</enum>
-     </property>
-     <property name="cursorPosition">
-      <number>0</number>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="passwordLine">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>220</y>
-       <width>461</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
      </property>
      <property name="cursorPosition">
       <number>0</number>

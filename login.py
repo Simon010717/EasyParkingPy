@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(531, 460)
+        MainWindow.resize(531, 456)
         MainWindow.setStyleSheet("*{\n"
 "font-family: segoe ui;\n"
 "}\n"
@@ -56,13 +56,13 @@ class Ui_MainWindow(object):
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
         self.usernameLine = QtWidgets.QLineEdit(self.frame_2)
-        self.usernameLine.setGeometry(QtCore.QRect(40, 310, 461, 61))
+        self.usernameLine.setGeometry(QtCore.QRect(40, 220, 461, 61))
         self.usernameLine.setText("")
         self.usernameLine.setEchoMode(QtWidgets.QLineEdit.Password)
         self.usernameLine.setCursorPosition(0)
         self.usernameLine.setObjectName("usernameLine")
         self.passwordLine = QtWidgets.QLineEdit(self.frame_2)
-        self.passwordLine.setGeometry(QtCore.QRect(40, 220, 461, 61))
+        self.passwordLine.setGeometry(QtCore.QRect(40, 310, 461, 61))
         self.passwordLine.setText("")
         self.passwordLine.setCursorPosition(0)
         self.passwordLine.setObjectName("passwordLine")
@@ -76,7 +76,7 @@ class Ui_MainWindow(object):
         self.label.setGeometry(QtCore.QRect(70, 0, 381, 171))
         self.label.setStyleSheet("")
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("easy_blanco.svg"))
+        self.label.setPixmap(QtGui.QPixmap(":/easy_blanco.svg"))
         self.label.setObjectName("label")
         self.usernameLabel = QtWidgets.QLabel(self.frame_2)
         self.usernameLabel.setGeometry(QtCore.QRect(40, 201, 191, 20))
@@ -96,7 +96,7 @@ class Ui_MainWindow(object):
         self.loginButton.setText(_translate("MainWindow", "Login"))
         self.usernameLabel.setText(_translate("MainWindow", "Usuario"))
         self.passwordLabel.setText(_translate("MainWindow", "Contraseña"))
-import logo
+import logo_rc
 
 
 if __name__ == "__main__":
