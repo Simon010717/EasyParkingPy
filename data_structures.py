@@ -264,6 +264,42 @@ class AvlTree(BinarySearchTree):
         else:
             return self.siguiente(x-1,n)
 
-            
+class BinaryHeap():
+    def __init__(self,capacity):
+        self.capacity = capacity
+        self.size = 0
+        self.heap = [None]*capacity
+
+    def insert(self,x):
+        if self.size == self.capacity - 1: return False
+        #sift up
+        sp = self.size + 1
+        while x.priority < self.heap[int(sp/2)].priority:
+            self.heap[sp] = self.heap[int(sp/2)]
+            sp = int(sp/2)
         
+        self.heap[sp] = x
+
+    def findMin(self):
+        if size > 0: return self.heap[1]
         
+    def deleteMin(self):
+        if size < 0: return None
+
+        min = self.findMin()
+
+        self.heap[1] = self.heap[self.size-1]
+        self.size -= 1
+
+        #sift down
+        hole = 1
+        tmp = self.heap[1]
+        while hole*2 < self.size:
+            child = hole*2
+
+            if child != self.size and self.heap[child].priority > self.heap[child+1].priority: child +=1
+            if self.heap[child] < tmp: self.heap[hole] = self.heap.child
+            else: break
+
+        self.heap[hole] = tmp
+
