@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>531</width>
-    <height>456</height>
+    <height>481</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,10 +22,10 @@ font-size: 15px;
 color: white;
 }
 QFrame{
-background: #444;
+background: #2B3446;
 }
 QPushButton{
-color: #444;
+color: #2B3446;
 border-radius: 15px;
 background:white;
 font-size: 30px;
@@ -35,28 +35,33 @@ background: transparent;
 border:none;
 }
 QPushButton:hover{
-background: #444;
+background: #2B3446;
 color: white;
 border-color: white;
 border-radius: 15px;
 }
 QLineEdit{
 background:transparent;
-color: #717072;
+color: white;
 border: none;
 border-bottom: 1px solid;
-border-color: #717072;
+border-color: white;
 font-size: 30px;
+}
+#ErrorLabel{
+font-size: 20px;
+background: transparent;
+color: red
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="frame_2">
+   <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
       <width>531</width>
-      <height>461</height>
+      <height>481</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -68,8 +73,8 @@ font-size: 30px;
     <widget class="QLineEdit" name="usernameLine">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>220</y>
+       <x>30</x>
+       <y>189</y>
        <width>461</width>
        <height>61</height>
       </rect>
@@ -81,7 +86,7 @@ font-size: 30px;
       <string/>
      </property>
      <property name="echoMode">
-      <enum>QLineEdit::PasswordEchoOnEdit</enum>
+      <enum>QLineEdit::Normal</enum>
      </property>
      <property name="cursorPosition">
       <number>0</number>
@@ -90,8 +95,8 @@ font-size: 30px;
     <widget class="QLineEdit" name="passwordLine">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>310</y>
+       <x>30</x>
+       <y>279</y>
        <width>461</width>
        <height>61</height>
       </rect>
@@ -106,56 +111,11 @@ font-size: 30px;
       <number>0</number>
      </property>
     </widget>
-    <widget class="QPushButton" name="registerButton">
-     <property name="geometry">
-      <rect>
-       <x>290</x>
-       <y>380</y>
-       <width>181</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Register</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="loginButton">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>380</y>
-       <width>181</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Login</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>70</x>
-       <y>0</y>
-       <width>381</width>
-       <height>171</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="logo.qrc">:/easy_blanco.svg</pixmap>
-     </property>
-    </widget>
     <widget class="QLabel" name="usernameLabel">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>201</y>
+       <x>30</x>
+       <y>170</y>
        <width>191</width>
        <height>20</height>
       </rect>
@@ -167,8 +127,8 @@ font-size: 30px;
     <widget class="QLabel" name="passwordLabel">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>291</y>
+       <x>30</x>
+       <y>260</y>
        <width>191</width>
        <height>20</height>
       </rect>
@@ -177,10 +137,72 @@ font-size: 30px;
       <string>Contraseña</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>20</y>
+       <width>381</width>
+       <height>171</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="logo.qrc">:/logo/easy_blanco.svg</pixmap>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="registerButton">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>400</y>
+       <width>181</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Registrar</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="loginButton">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>400</y>
+       <width>181</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Ingresar</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ErrorLabel">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>350</y>
+       <width>461</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>
  <resources>
+  <include location="../logo.qrc"/>
   <include location="logo.qrc"/>
  </resources>
  <connections/>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>530</width>
+    <height>462</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">*{
+font-family: segoe ui;
+}
+QLabel{
+font-size: 15px;
+color: white;
+}
+QFrame{
+background: #2B3446;
+}
+#parquearButton{
+color: #2B3446;
+border-radius: 15px;
+background:white;
+font-size: 30px;
+}
+QToolButton{
+background: transparent;
+border:none;
+}
+#parquearButton:hover{
+background:transparent;
+color: white;
+border-color: white;
+border-radius: 15px;
+border-width: 4px;
+border-style: solid;
+}
+#generarFacturaButton{
+border-style: dotted;
+background: transparent;
+color:white;
+border-color: white;
+border-width:2px;
+border-radius: 15px;
+font-size: 30px;
+}
+#generarFacturaButton:hover{
+background: white;
+color:#2B3446;
+border: none
+}
+QLineEdit{
+background:transparent;
+color: white;
+border: none;
+border-bottom: 1px solid;
+border-color: white;
+font-size: 30px;
+}
+#modificarInfoButton{
+font-size:15px;
+background: transparent;
+color: white;
+border: none;
+border-radius: 0px;
+}
+#modificarInfoButton:hover{
+text-decoration:underline;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QFrame" name="frame_3">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>531</width>
+      <height>461</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QPushButton" name="parquearButton">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>30</y>
+       <width>451</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Parquear</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="generarFacturaButton">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>340</y>
+       <width>451</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Factura</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="modificarInfoButton">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>410</y>
+       <width>191</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Modificar Información</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../logo.qrc"/>
+  <include location="../../AppData/Local/Programs/Python/Python37/Lib/site-packages/pyqt5_tools/Qt/bin/logo.qrc"/>
+ </resources>
+ <connections/>
+</ui>

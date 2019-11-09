@@ -1,0 +1,1 @@
+ pyuic5 -x "C:/Users/Simon/Desktop/EasyParkingPy/ui_py/login.ui" -o "C:/Users/Simon/Desktop/EasyParkingPy/ui_py/login.py"

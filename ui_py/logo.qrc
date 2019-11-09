@@ -1,0 +1,8 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>logo/easy_blanco.svg</file>
+    <file>logo/ep_blanco.svg</file>
+    <file>logo/easy_negro.svg</file>
+    <file>logo/ep_negro.svg</file>
+</qresource>
+</RCC>

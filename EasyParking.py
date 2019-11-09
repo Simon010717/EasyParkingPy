@@ -108,11 +108,11 @@ class EasyParking:
         return 3
     
     def checkLogin(self,nickname,password):
-        for u in self.usuarios:
+        for index, u in enumerate(self.usuarios):
             if u.nickname == nickname:
-                if u.password == password: return True
-                return False
-        return False
+                if u.password == password: return index
+                return -1
+        return -2
 
 
     #def addUsuario(self, ced, nickname, password, nombre, apellido, edad, placa, email=None, direccion=None, tel=None):
