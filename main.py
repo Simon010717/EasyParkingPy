@@ -8,7 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog, QMainWindow, QWidget, QDesktopWidget
 import EasyParking
 
 class Ui_MainWindow(object):
@@ -87,6 +87,12 @@ class Ui_MainWindow(object):
         self.ui=Ui_MainWindow(self.mainWindow,self.ep)
         self.ui.setupUiFactura(self.mainWindow)
         self.mainWindow.show()
+
+    def resize(self):
+        qtRectangle = self.frame.frameGeometry()
+        centerPoint = self.mainWindow.frameGeometry().center()
+        qtRectangle.moveCenter(centerPoint)
+        self.frame.move(qtRectangle.topLeft())
 
     def setupUiLogin(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -174,6 +180,8 @@ class Ui_MainWindow(object):
         self.ErrorLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.ErrorLabel.setObjectName("ErrorLabel")
         MainWindow.setCentralWidget(self.centralwidget)
+
+        
 
         #botones
         self.registerButton.clicked.connect(self.registroLogin)
