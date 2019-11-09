@@ -67,25 +67,52 @@ class Ui_MainWindow(object):
     def loginLogin(self):
         tNickname = self.usernameLine.text()
         tPassword = self.passwordLine.text()
+        if self.adminButton.clicked:
+            self.indexUsuario = self.ep.checkLogin(tNickname,tPassword)
 
-        self.indexUsuario = self.ep.checkLogin(tNickname,tPassword)
+            if self.indexUsuario > -1:
+                self.mainWindow.hide()
+                self.mainWindow=QtWidgets.QMainWindow()
+                self.ui=Ui_MainWindow(self.mainWindow,self.ep)
+                self.ui.setupUiOpciones(self.mainWindow)
+                self.mainWindow.show()
+            elif self.indexUsuario == -1:
+                self.ErrorLabel.setText("Contraseña incorrecta")
+            elif self.indexUsuario == -2:
+                self.ErrorLabel.setText("Usuario no encontrado")
+        else:
+            self.indexEmpleado = self.ep.checkLoginEmpleado(tNickname,tPassword)
 
-        if self.indexUsuario > -1:
-            self.mainWindow.hide()
-            self.mainWindow=QtWidgets.QMainWindow()
-            self.ui=Ui_MainWindow(self.mainWindow,self.ep)
-            self.ui.setupUiOpciones(self.mainWindow)
-            self.mainWindow.show()
-        elif self.indexUsuario == -1:
-            self.ErrorLabel.setText("Contraseña incorrecta")
-        elif self.indexUsuario == -2:
-            self.ErrorLabel.setText("Usuario no encontrado")
+            if self.indexEmpleado > -1:
+                self.mainWindow.hide()
+                self.mainWindow=QtWidgets.QMainWindow()
+                self.ui=Ui_MainWindow(self.mainWindow,self.ep)
+                self.ui.setupUiOpciones(self.mainWindow)
+                self.mainWindow.show()
+            elif self.indexEmpleado == -1:
+                self.ErrorLabel.setText("Contraseña de administrador incorrecta")
+            elif self.indexEmpleado == -2:
+                self.ErrorLabel.setText("Administrador no encontrado")
+
+    def regresarOpciones(self):
+        self.mainWindow.hide()
+        self.mainWindow=QtWidgets.QMainWindow()
+        self.ui=Ui_MainWindow(self.mainWindow,self.ep)
+        self.ui.setupUiLogin(self.mainWindow)
+        self.mainWindow.show()
 
     def facturaOpciones(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
         self.ui=Ui_MainWindow(self.mainWindow,self.ep)
         self.ui.setupUiFactura(self.mainWindow)
+        self.mainWindow.show()
+
+    def regresarFactura(self):
+        self.mainWindow.hide()
+        self.mainWindow=QtWidgets.QMainWindow()
+        self.ui=Ui_MainWindow(self.mainWindow,self.ep)
+        self.ui.setupUiOpciones(self.mainWindow)
         self.mainWindow.show()
 
     def resize(self):
@@ -179,9 +206,11 @@ class Ui_MainWindow(object):
         self.ErrorLabel.setText("")
         self.ErrorLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.ErrorLabel.setObjectName("ErrorLabel")
+        self.adminButton = QtWidgets.QRadioButton(self.frame)
+        self.adminButton.setGeometry(QtCore.QRect(470, 170, 16, 20))
+        self.adminButton.setText("")
+        self.adminButton.setObjectName("adminButton")
         MainWindow.setCentralWidget(self.centralwidget)
-
-        
 
         #botones
         self.registerButton.clicked.connect(self.registroLogin)
@@ -392,10 +421,9 @@ class Ui_MainWindow(object):
 
     def setupUiOpciones(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(527, 462)
+        MainWindow.resize(530, 459)
         MainWindow.setStyleSheet("*{\n"
         "font-family: segoe ui;\n"
-        "background: #556f7a;\n"
         "}\n"
         "QLabel{\n"
         "font-size: 15px;\n"
@@ -436,6 +464,23 @@ class Ui_MainWindow(object):
         "color:#2B3446;\n"
         "border: none\n"
         "}\n"
+        "#regresarButton{\n"
+        "font-size:15px;\n"
+        "border-radius: 10px;\n"
+        "color: #2B3446;\n"
+        "background:white;\n"
+        "}\n"
+        "\n"
+        "#regresarButton:hover{\n"
+        "background:transparent;\n"
+        "color: white;\n"
+        "border-color: white;\n"
+        "border-radius: 10px;\n"
+        "border-width: 2px;\n"
+        "border-style: solid;\n"
+        "}\n"
+        "\n"
+        "\n"
         "QLineEdit{\n"
         "background:transparent;\n"
         "color: white;\n"
@@ -456,39 +501,44 @@ class Ui_MainWindow(object):
         "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.frame_3 = QtWidgets.QFrame(self.centralwidget)
-        self.frame_3.setGeometry(QtCore.QRect(0, 0, 531, 461))
-        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setObjectName("frame_3")
-        self.parquearButton = QtWidgets.QPushButton(self.frame_3)
+        self.frame = QtWidgets.QFrame(self.centralwidget)
+        self.frame.setGeometry(QtCore.QRect(0, 0, 531, 461))
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.parquearButton = QtWidgets.QPushButton(self.frame)
         self.parquearButton.setGeometry(QtCore.QRect(40, 30, 451, 81))
         self.parquearButton.setObjectName("parquearButton")
-        self.generarFacturaButton = QtWidgets.QPushButton(self.frame_3)
+        self.generarFacturaButton = QtWidgets.QPushButton(self.frame)
         self.generarFacturaButton.setGeometry(QtCore.QRect(40, 340, 451, 61))
         self.generarFacturaButton.setObjectName("generarFacturaButton")
-        self.modificarInfoButton = QtWidgets.QPushButton(self.frame_3)
-        self.modificarInfoButton.setGeometry(QtCore.QRect(170, 410, 191, 21))
+        self.modificarInfoButton = QtWidgets.QPushButton(self.frame)
+        self.modificarInfoButton.setGeometry(QtCore.QRect(170, 420, 191, 21))
         self.modificarInfoButton.setObjectName("modificarInfoButton")
+        self.regresarButton = QtWidgets.QPushButton(self.frame)
+        self.regresarButton.setGeometry(QtCore.QRect(40, 280, 111, 41))
+        self.regresarButton.setObjectName("regresarButton")
         MainWindow.setCentralWidget(self.centralwidget)
 
         #botones
         self.generarFacturaButton.clicked.connect(self.facturaOpciones)
+        self.regresarButton.clicked.connect(self.regresarOpciones)
 
         self.retranslateUiOpciones(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUiOpciones(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("Easy Parking", "Easy Parking"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.parquearButton.setText(_translate("MainWindow", "Parquear"))
         self.generarFacturaButton.setText(_translate("MainWindow", "Factura"))
         self.modificarInfoButton.setText(_translate("MainWindow", "Modificar Información"))
+        self.regresarButton.setText(_translate("MainWindow", "Regresar"))
 
     def setupUiFactura(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(420, 551)
+        MainWindow.resize(418, 530)
         MainWindow.setStyleSheet("*{\n"
         "font-family: courier new;\n"
         "text-align: center;\n"
@@ -501,16 +551,26 @@ class Ui_MainWindow(object):
         "}\n"
         "QFrame{\n"
         "background: white;\n"
+        "}\n"
+        "QPushButton{\n"
+        "color: #2B3446;\n"
+        "border-radius: 5px;\n"
+        "background:white;\n"
+        "font-size: 15px\n"
+        "}\n"
+        "QPushButton:hover{\n"
+        "border-style:solid;\n"
+        "border-width:1px;\n"
         "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setGeometry(QtCore.QRect(0, 0, 421, 551))
+        self.frame.setGeometry(QtCore.QRect(0, 0, 421, 531))
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.frame)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 421, 431))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 50, 421, 371))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -619,8 +679,6 @@ class Ui_MainWindow(object):
         self.divisor1.setEnabled(True)
         font = QtGui.QFont()
         font.setFamily("courier new")
-        font.setBold(True)
-        font.setWeight(75)
         self.divisor1.setFont(font)
         self.divisor1.setAlignment(QtCore.Qt.AlignCenter)
         self.divisor1.setObjectName("divisor1")
@@ -677,6 +735,7 @@ class Ui_MainWindow(object):
         self.tiempo.setEnabled(True)
         font = QtGui.QFont()
         font.setFamily("courier new")
+        
         font.setBold(True)
         font.setWeight(75)
         self.tiempo.setFont(font)
@@ -688,6 +747,7 @@ class Ui_MainWindow(object):
         self.total.setEnabled(True)
         font = QtGui.QFont()
         font.setFamily("courier new")
+        
         font.setBold(True)
         font.setWeight(75)
         self.total.setFont(font)
@@ -700,6 +760,7 @@ class Ui_MainWindow(object):
         self.divisor3.setEnabled(True)
         font = QtGui.QFont()
         font.setFamily("courier new")
+        
         font.setBold(True)
         font.setWeight(75)
         self.divisor3.setFont(font)
@@ -710,6 +771,7 @@ class Ui_MainWindow(object):
         self.divisor4.setEnabled(True)
         font = QtGui.QFont()
         font.setFamily("courier new")
+        
         font.setBold(True)
         font.setWeight(75)
         self.divisor4.setFont(font)
@@ -718,29 +780,45 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.divisor4)
         self.codigoDeBarras = QtWidgets.QLabel(self.frame)
         self.codigoDeBarras.setEnabled(True)
-        self.codigoDeBarras.setGeometry(QtCore.QRect(0, 460, 421, 81))
+        self.codigoDeBarras.setGeometry(QtCore.QRect(0, 430, 421, 81))
         font = QtGui.QFont()
         font.setFamily("courier new")
+        
         font.setBold(True)
         font.setWeight(75)
         self.codigoDeBarras.setFont(font)
         self.codigoDeBarras.setText("")
         self.codigoDeBarras.setAlignment(QtCore.Qt.AlignCenter)
         self.codigoDeBarras.setObjectName("codigoDeBarras")
+        self.label_11 = QtWidgets.QLabel(self.frame)
+        self.label_11.setGeometry(QtCore.QRect(370, 0, 41, 51))
+        self.label_11.setStyleSheet("")
+        self.label_11.setText("")
+        self.label_11.setPixmap(QtGui.QPixmap(":/logo/ep_negro.svg"))
+        self.label_11.setScaledContents(True)
+        self.label_11.setObjectName("label_11")
+        self.regresarButton = QtWidgets.QPushButton(self.frame)
+        self.regresarButton.setGeometry(QtCore.QRect(10, 10, 131, 28))
+        self.regresarButton.setObjectName("regresarButton")
         MainWindow.setCentralWidget(self.centralwidget)
+
+        #botones
+        self.regresarButton.clicked.connect(self.regresarFactura)
+
 
         self.retranslateUiFactura(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUiFactura(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("Easy Parking", "Easy Parking"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.title.setText(_translate("MainWindow", "Easy Parking S.A"))
         self.nit.setText(_translate("MainWindow", "NIT: 1234567989"))
         self.divisor1.setText(_translate("MainWindow", "-------------------------------------------"))
         self.divisor2.setText(_translate("MainWindow", "-------------------------------------------"))
         self.divisor3.setText(_translate("MainWindow", "-------------------------------------------"))
         self.divisor4.setText(_translate("MainWindow", "-------------------------------------------"))
+        self.regresarButton.setText(_translate("MainWindow", "Regresar"))
 
 
 

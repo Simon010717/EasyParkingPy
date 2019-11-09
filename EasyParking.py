@@ -31,15 +31,24 @@ class Espacio:
         self.libre = libre
         self.carro = carro
 
+class Empleado:
+    def __init__(self,nickname,password,nombre):
+        self.nickname = nickname
+        self.password = password
+        self.nombre = nombre
+
 class EasyParking:
 
     def __init__(self):
         self.usuariosRoute = "usuarios.ep"
         self.parqueaderosRoute = "parqueaderos"
+        self.empleadosRoute = "empleados.ep"
         self.usuarios = []
         self.addUsuarios()
         self.parqueaderos = []
         self.addParqueaderos()
+        self.empleados = []
+        self.addEmpleados()
 
     def addParqueaderos(self):
         n = len(os.listdir(self.parqueaderosRoute))
@@ -62,12 +71,6 @@ class EasyParking:
                     self.parqueaderos[i].espaciosTree.root = self.parqueaderos[i].espaciosTree.insert(p,self.parqueaderos[i].espaciosTree.root)
                 l+=1
     
-    def buscarUsuario(self,ced):
-        for u in self.usuarios:
-            if ced == u.ced:
-                return u
-        return None
-        
     def addParqueadero(self,info,verified):
         if not verified:
             for p in self.parqueaderos:
@@ -78,7 +81,13 @@ class EasyParking:
             with open(self.parqueaderosRoute+"/p"+str(len(self.parqueaderos)),"w") as f:
                 f.writelines(data)
         self.parqueaderos.append(Parqueadero(info[0],info[1],info[2],info[3],info[4],int(info[5]),int(info[6])))
-        
+
+    def buscarUsuario(self,ced):
+        for u in self.usuarios:
+            if ced == u.ced:
+                return u
+        return None
+           
     def addUsuarios(self):
         with open(self.usuariosRoute,"r") as f:
             data = f.readlines()
@@ -113,28 +122,47 @@ class EasyParking:
                 if u.password == password: return index
                 return -1
         return -2
+    
+    def buscarEmpleado(self,ced):
+        for e in self.empleados:
+            if ced == e.ced:
+                return e
+        return None
+           
+    def addEmpleados(self):
+        with open(self.empleadosRoute,"r") as f:
+            data = f.readlines()
+        
+        for line in data:
+            line = line.rstrip('\n')
+            self.addEmpleadoArr(line.split("*"),True)
 
+    def addEmpleadoArr(self,info,verified):
+        if len(info) < 3: return None
+        if not verified:
+            check = self.checkInfoEmpleado(info)
+            if check < 3: return check
 
-    #def addUsuario(self, ced, nickname, password, nombre, apellido, edad, placa, email=None, direccion=None, tel=None):
-    #    self.usuarios.append(Usuario(ced, nickname, password, nombre, apellido, edad, placa, email, direccion, tel))
+        line = '*'.join(info)
 
-    def checkInfo(self,info):
-        ced = info[0]
-        nickname = info[1]
-        placa = info[2]
+        for i in range(len(info),10):
+            info.append(None)
 
-        for u in self.usuarios:
-            if u.ced == ced: return 0
-            if u.nickname == nickname: return 1
-            if u.carro.placa == placa: return 2
+        self.empleados.append(Empleado(info[0],info[1],info[2]))
+        
+        if not verified:
+            with open(self.empleadosRoute,"a") as f:
+                if len(self.empleados) > 1: f.write('\n')
+                f.writelines(line)
+
         return 3
     
-    def comprobarUsuario(self, nickname, password):
-        for i in range(len(self.usuarios)):
-            if(self.usuarios[i].nickname == nickname and self.usuarios[i].password == password):
-                return True
-        
-        return False
+    def checkLoginEmpleado(self,nickname,password):
+        for index, e in enumerate(self.empleados):
+            if e.nickname == nickname:
+                if e.password == password: return index
+                return -1
+        return -2
     
 class Parqueadero:
 
@@ -176,9 +204,6 @@ class Test:
 
         return time.time() - start
 
-    
-
-
 def main():
     n = 1000
     avl = dt.AvlTree()
@@ -201,11 +226,8 @@ def main():
     for i in range(n):
         if not avl.contains(i,avl.root): print(i,end = ':')
 
-
-
 if __name__ == "__main__":
     #main()
-    ep = EasyParking()
-
+    print("done")
 
     

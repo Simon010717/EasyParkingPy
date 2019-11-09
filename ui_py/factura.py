@@ -14,10 +14,10 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(420, 551)
+        MainWindow.resize(418, 530)
         MainWindow.setStyleSheet("*{\n"
 "font-family: courier new;\n"
-"align: center;\n"
+"text-align: center;\n"
 "}\n"
 "QLabel{\n"
 "font-size: 15px;\n"
@@ -27,16 +27,26 @@ class Ui_MainWindow(object):
 "}\n"
 "QFrame{\n"
 "background: white;\n"
+"}\n"
+"QPushButton{\n"
+"color: #2B3446;\n"
+"border-radius: 5px;\n"
+"background:white;\n"
+"font-size: 15px\n"
+"}\n"
+"QPushButton:hover{\n"
+"border-style:solid;\n"
+"border-width:1px;\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setGeometry(QtCore.QRect(0, 0, 421, 551))
+        self.frame.setGeometry(QtCore.QRect(0, 0, 421, 531))
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.frame)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 421, 431))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 50, 421, 371))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -155,8 +165,6 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setFamily("courier new")
         font.setPointSize(-1)
-        font.setBold(True)
-        font.setWeight(75)
         self.divisor1.setFont(font)
         self.divisor1.setAlignment(QtCore.Qt.AlignCenter)
         self.divisor1.setObjectName("divisor1")
@@ -262,7 +270,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.divisor4)
         self.codigoDeBarras = QtWidgets.QLabel(self.frame)
         self.codigoDeBarras.setEnabled(True)
-        self.codigoDeBarras.setGeometry(QtCore.QRect(0, 460, 421, 81))
+        self.codigoDeBarras.setGeometry(QtCore.QRect(0, 430, 421, 81))
         font = QtGui.QFont()
         font.setFamily("courier new")
         font.setPointSize(-1)
@@ -272,6 +280,16 @@ class Ui_MainWindow(object):
         self.codigoDeBarras.setText("")
         self.codigoDeBarras.setAlignment(QtCore.Qt.AlignCenter)
         self.codigoDeBarras.setObjectName("codigoDeBarras")
+        self.label_11 = QtWidgets.QLabel(self.frame)
+        self.label_11.setGeometry(QtCore.QRect(370, 0, 41, 51))
+        self.label_11.setStyleSheet("")
+        self.label_11.setText("")
+        self.label_11.setPixmap(QtGui.QPixmap(":/logo/ep_negro.svg"))
+        self.label_11.setScaledContents(True)
+        self.label_11.setObjectName("label_11")
+        self.regresarButton = QtWidgets.QPushButton(self.frame)
+        self.regresarButton.setGeometry(QtCore.QRect(10, 10, 131, 28))
+        self.regresarButton.setObjectName("regresarButton")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -286,6 +304,8 @@ class Ui_MainWindow(object):
         self.divisor2.setText(_translate("MainWindow", "-------------------------------------------"))
         self.divisor3.setText(_translate("MainWindow", "-------------------------------------------"))
         self.divisor4.setText(_translate("MainWindow", "-------------------------------------------"))
+        self.regresarButton.setText(_translate("MainWindow", "Regresar"))
+import logo_rc
 
 
 if __name__ == "__main__":

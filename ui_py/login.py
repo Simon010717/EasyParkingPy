@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(531, 481)
+        MainWindow.resize(530, 479)
         MainWindow.setStyleSheet("*{\n"
 "font-family: segoe ui;\n"
 "}\n"
@@ -86,16 +86,20 @@ class Ui_MainWindow(object):
         self.label_3.setPixmap(QtGui.QPixmap(":/logo/easy_blanco.svg"))
         self.label_3.setObjectName("label_3")
         self.registerButton = QtWidgets.QPushButton(self.frame)
-        self.registerButton.setGeometry(QtCore.QRect(270, 400, 181, 51))
+        self.registerButton.setGeometry(QtCore.QRect(70, 380, 181, 51))
         self.registerButton.setObjectName("registerButton")
         self.loginButton = QtWidgets.QPushButton(self.frame)
-        self.loginButton.setGeometry(QtCore.QRect(70, 400, 181, 51))
+        self.loginButton.setGeometry(QtCore.QRect(270, 380, 181, 51))
         self.loginButton.setObjectName("loginButton")
         self.ErrorLabel = QtWidgets.QLabel(self.frame)
         self.ErrorLabel.setGeometry(QtCore.QRect(30, 350, 461, 31))
         self.ErrorLabel.setText("")
         self.ErrorLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.ErrorLabel.setObjectName("ErrorLabel")
+        self.adminButton = QtWidgets.QRadioButton(self.frame)
+        self.adminButton.setGeometry(QtCore.QRect(470, 170, 16, 20))
+        self.adminButton.setText("")
+        self.adminButton.setObjectName("adminButton")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
