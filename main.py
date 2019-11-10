@@ -8,8 +8,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QDialog, QMainWindow, QWidget, QDesktopWidget
+from PyQt5.QtWidgets import QDialog, QMainWindow, QWidget, QDesktopWidget, QLabel,QPushButton
 import EasyParking
+
+
 
 class Ui_MainWindow(object):
 
@@ -81,11 +83,35 @@ class Ui_MainWindow(object):
         elif self.indexUsuario == -2:
             self.ErrorLabel.setText("Usuario no encontrado")
 
+
+    def parquearOpciones(self):
+        self.mainWindow.hide()
+        self.mainWindow=QtWidgets.QMainWindow()
+        self.ui=Ui_MainWindow(self.mainWindow,self.ep)
+        self.ui.setupUiParqueaderos(self.mainWindow)
+        self.mainWindow.show()
+
+
+    def regresarOpciones(self):
+        self.mainWindow.hide()
+        self.mainWindow=QtWidgets.QMainWindow()
+        self.ui=Ui_MainWindow(self.mainWindow,self.ep)
+        self.ui.setupUiLogin(self.mainWindow)
+        self.mainWindow.show()
+
     def facturaOpciones(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
         self.ui=Ui_MainWindow(self.mainWindow,self.ep)
         self.ui.setupUiFactura(self.mainWindow)
+        self.mainWindow.show()
+
+
+    def regresarParqueaderos(self):
+        self.mainWindow.hide()
+        self.mainWindow=QtWidgets.QMainWindow()
+        self.ui=Ui_MainWindow(self.mainWindow,self.ep)
+        self.ui.setupUiOpciones(self.mainWindow)
         self.mainWindow.show()
 
     def resize(self):
@@ -392,10 +418,9 @@ class Ui_MainWindow(object):
 
     def setupUiOpciones(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(527, 462)
+        MainWindow.resize(530, 459)
         MainWindow.setStyleSheet("*{\n"
         "font-family: segoe ui;\n"
-        "background: #556f7a;\n"
         "}\n"
         "QLabel{\n"
         "font-size: 15px;\n"
@@ -436,6 +461,23 @@ class Ui_MainWindow(object):
         "color:#2B3446;\n"
         "border: none\n"
         "}\n"
+        "#regresarButton{\n"
+        "font-size:15px;\n"
+        "border-radius: 10px;\n"
+        "color: #2B3446;\n"
+        "background:white;\n"
+        "}\n"
+        "\n"
+        "#regresarButton:hover{\n"
+        "background:transparent;\n"
+        "color: white;\n"
+        "border-color: white;\n"
+        "border-radius: 10px;\n"
+        "border-width: 2px;\n"
+        "border-style: solid;\n"
+        "}\n"
+        "\n"
+        "\n"
         "QLineEdit{\n"
         "background:transparent;\n"
         "color: white;\n"
@@ -456,24 +498,29 @@ class Ui_MainWindow(object):
         "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.frame_3 = QtWidgets.QFrame(self.centralwidget)
-        self.frame_3.setGeometry(QtCore.QRect(0, 0, 531, 461))
-        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setObjectName("frame_3")
-        self.parquearButton = QtWidgets.QPushButton(self.frame_3)
+        self.frame = QtWidgets.QFrame(self.centralwidget)
+        self.frame.setGeometry(QtCore.QRect(0, 0, 531, 461))
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.parquearButton = QtWidgets.QPushButton(self.frame)
         self.parquearButton.setGeometry(QtCore.QRect(40, 30, 451, 81))
         self.parquearButton.setObjectName("parquearButton")
-        self.generarFacturaButton = QtWidgets.QPushButton(self.frame_3)
-        self.generarFacturaButton.setGeometry(QtCore.QRect(40, 340, 451, 61))
+        self.generarFacturaButton = QtWidgets.QPushButton(self.frame)
+        self.generarFacturaButton.setGeometry(QtCore.QRect(40, 280, 451, 61))
         self.generarFacturaButton.setObjectName("generarFacturaButton")
-        self.modificarInfoButton = QtWidgets.QPushButton(self.frame_3)
-        self.modificarInfoButton.setGeometry(QtCore.QRect(170, 410, 191, 21))
+        self.modificarInfoButton = QtWidgets.QPushButton(self.frame)
+        self.modificarInfoButton.setGeometry(QtCore.QRect(170, 360, 191, 21))
         self.modificarInfoButton.setObjectName("modificarInfoButton")
+        self.regresarButton = QtWidgets.QPushButton(self.frame)
+        self.regresarButton.setGeometry(QtCore.QRect(20, 400, 111, 41))
+        self.regresarButton.setObjectName("regresarButton")
         MainWindow.setCentralWidget(self.centralwidget)
 
         #botones
         self.generarFacturaButton.clicked.connect(self.facturaOpciones)
+        self.regresarButton.clicked.connect(self.regresarOpciones)
+        self.parquearButton.clicked.connect(self.parquearOpciones)
 
         self.retranslateUiOpciones(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -742,7 +789,99 @@ class Ui_MainWindow(object):
         self.divisor3.setText(_translate("MainWindow", "-------------------------------------------"))
         self.divisor4.setText(_translate("MainWindow", "-------------------------------------------"))
 
+    def setupUiParqueaderos(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(561, 519)
+        MainWindow.setStyleSheet("*{\n"
+        "font-family: segoe ui;\n"
+        "}\n"
+        "QLabel{\n"
+        "font-size: 15px;\n"
+        "color: white;\n"
+        "}\n"
+        "QFrame{\n"
+        "background: #2B3446;\n"
+        "}\n"
+        "QPushButton{\n"
+        "color: #2B3446;\n"
+        "border-radius: 15px;\n"
+        "background:white;\n"
+        "font-size: 30px;\n"
+        "}\n"
+        "QToolButton{\n"
+        "background: transparent;\n"
+        "border:none;\n"
+        "}\n"
+        "QPushButton:hover{\n"
+        "background: #2B3446;\n"
+        "color: white;\n"
+        "border-color: white;\n"
+        "border-radius: 15px;\n"
+        "}\n"
+        "QLineEdit{\n"
+        "background:transparent;\n"
+        "color: white;\n"
+        "border: none;\n"
+        "border-bottom: 1px solid;\n"
+        "border-color: white;\n"
+        "font-size: 30px;\n"
+        "}\n"
+        "#ErrorLabel{\n"
+        "font-size: 20px;\n"
+        "background: transparent;\n"
+        "color: red\n"
+        "}")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.frame = QtWidgets.QFrame(self.centralwidget)
+        self.frame.setGeometry(QtCore.QRect(0, 0, 561, 521))
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.horizontalLayoutWidget = QtWidgets.QWidget(self.frame)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(60, 20, 421, 411))
+        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
+        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.nombres = QtWidgets.QVBoxLayout()
+        self.nombres.setObjectName("nombres")
+        self.horizontalLayout_3.addLayout(self.nombres)
+        self.botones = QtWidgets.QVBoxLayout()
+        self.botones.setObjectName("botones")
+        self.horizontalLayout_3.addLayout(self.botones)
+        self.regresar = QtWidgets.QPushButton(self.frame)
+        self.regresar.setGeometry(QtCore.QRect(20, 460, 181, 41))
+        self.regresar.setObjectName("regresar")
 
+        self.nomLabels = []
+
+        for inL, label in enumerate(self.ep.parqueaderos):
+            label = QtWidgets.QLabel(self.horizontalLayoutWidget)
+            label.setObjectName(str("nombre_"+str(inL)))
+            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+            sizePolicy.setHorizontalStretch(0)
+            sizePolicy.setVerticalStretch(0)
+            sizePolicy.setHeightForWidth(label.sizePolicy().hasHeightForWidth())
+            label.setSizePolicy(sizePolicy)            
+            self.nombres.addWidget(label)
+            self.nomLabels.append(label)
+
+
+        MainWindow.setCentralWidget(self.centralwidget)
+
+        #botones
+        self.regresar.clicked.connect(self.regresarParqueaderos)
+
+        self.retranslateUiParqueaderos(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUiParqueaderos(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.regresar.setText(_translate("MainWindow", "Regresar"))
+        for inL in range(len(self.ep.parqueaderos)):
+            self.nomLabels[inL].setText(_translate("MainWindow", self.ep.parqueaderos[inL].nombre))   
 
 if __name__ == "__main__":
     import sys

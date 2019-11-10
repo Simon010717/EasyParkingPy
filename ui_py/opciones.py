@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:/Users/Simon/Desktop/EasyParkingPy/ui_py/opciones.ui'
+# Form implementation generated from reading ui file 'C:/Users/ADMIN/Desktop/EasyParkingPy/ui_py/opciones.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(530, 462)
+        MainWindow.resize(530, 459)
         MainWindow.setStyleSheet("*{\n"
 "font-family: segoe ui;\n"
 "}\n"
@@ -56,6 +56,23 @@ class Ui_MainWindow(object):
 "color:#2B3446;\n"
 "border: none\n"
 "}\n"
+"#regresarButton{\n"
+"font-size:15px;\n"
+"border-radius: 10px;\n"
+"color: #2B3446;\n"
+"background:white;\n"
+"}\n"
+"\n"
+"#regresarButton:hover{\n"
+"background:transparent;\n"
+"color: white;\n"
+"border-color: white;\n"
+"border-radius: 10px;\n"
+"border-width: 2px;\n"
+"border-style: solid;\n"
+"}\n"
+"\n"
+"\n"
 "QLineEdit{\n"
 "background:transparent;\n"
 "color: white;\n"
@@ -76,20 +93,23 @@ class Ui_MainWindow(object):
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.frame_3 = QtWidgets.QFrame(self.centralwidget)
-        self.frame_3.setGeometry(QtCore.QRect(0, 0, 531, 461))
-        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setObjectName("frame_3")
-        self.parquearButton = QtWidgets.QPushButton(self.frame_3)
+        self.frame = QtWidgets.QFrame(self.centralwidget)
+        self.frame.setGeometry(QtCore.QRect(0, 0, 531, 461))
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+        self.parquearButton = QtWidgets.QPushButton(self.frame)
         self.parquearButton.setGeometry(QtCore.QRect(40, 30, 451, 81))
         self.parquearButton.setObjectName("parquearButton")
-        self.generarFacturaButton = QtWidgets.QPushButton(self.frame_3)
-        self.generarFacturaButton.setGeometry(QtCore.QRect(40, 340, 451, 61))
+        self.generarFacturaButton = QtWidgets.QPushButton(self.frame)
+        self.generarFacturaButton.setGeometry(QtCore.QRect(40, 280, 451, 61))
         self.generarFacturaButton.setObjectName("generarFacturaButton")
-        self.modificarInfoButton = QtWidgets.QPushButton(self.frame_3)
-        self.modificarInfoButton.setGeometry(QtCore.QRect(170, 410, 191, 21))
+        self.modificarInfoButton = QtWidgets.QPushButton(self.frame)
+        self.modificarInfoButton.setGeometry(QtCore.QRect(170, 360, 191, 21))
         self.modificarInfoButton.setObjectName("modificarInfoButton")
+        self.regresarButton = QtWidgets.QPushButton(self.frame)
+        self.regresarButton.setGeometry(QtCore.QRect(20, 400, 111, 41))
+        self.regresarButton.setObjectName("regresarButton")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -101,6 +121,7 @@ class Ui_MainWindow(object):
         self.parquearButton.setText(_translate("MainWindow", "Parquear"))
         self.generarFacturaButton.setText(_translate("MainWindow", "Factura"))
         self.modificarInfoButton.setText(_translate("MainWindow", "Modificar Información"))
+        self.regresarButton.setText(_translate("MainWindow", "Regresar"))
 import logo_rc
 
 

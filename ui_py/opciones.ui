@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>530</width>
-    <height>462</height>
+    <height>459</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,6 +56,23 @@ background: white;
 color:#2B3446;
 border: none
 }
+#regresarButton{
+font-size:15px;
+border-radius: 10px;
+color: #2B3446;
+background:white;
+}
+
+#regresarButton:hover{
+background:transparent;
+color: white;
+border-color: white;
+border-radius: 10px;
+border-width: 2px;
+border-style: solid;
+}
+
+
 QLineEdit{
 background:transparent;
 color: white;
@@ -76,7 +93,7 @@ text-decoration:underline;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="frame_3">
+   <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -108,7 +125,7 @@ text-decoration:underline;
      <property name="geometry">
       <rect>
        <x>40</x>
-       <y>340</y>
+       <y>280</y>
        <width>451</width>
        <height>61</height>
       </rect>
@@ -121,7 +138,7 @@ text-decoration:underline;
      <property name="geometry">
       <rect>
        <x>170</x>
-       <y>410</y>
+       <y>360</y>
        <width>191</width>
        <height>21</height>
       </rect>
@@ -130,12 +147,25 @@ text-decoration:underline;
       <string>Modificar Información</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="regresarButton">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>400</y>
+       <width>111</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Regresar</string>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>
  <resources>
   <include location="../logo.qrc"/>
-  <include location="../../AppData/Local/Programs/Python/Python37/Lib/site-packages/pyqt5_tools/Qt/bin/logo.qrc"/>
+  <include location="logo.qrc"/>
  </resources>
  <connections/>
 </ui>
