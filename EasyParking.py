@@ -82,12 +82,6 @@ class EasyParking:
                 f.writelines(data)
         self.parqueaderos.append(Parqueadero(info[0],info[1],info[2],info[3],info[4],int(info[5]),int(info[6])))
 
-    def buscarUsuario(self,ced):
-        for u in self.usuarios:
-            if ced == u.ced:
-                return u
-        return None
-           
     def addUsuarios(self):
         with open(self.usuariosRoute,"r") as f:
             data = f.readlines()
@@ -177,10 +171,9 @@ class Parqueadero:
         self.direccion = direccion
         self.tel = tel
         self.gerente = gerente
-
+        
     def addEspacio(self):
         self.espacios.append(Espacio(self.espaciosTotales+1))   
-        
 
     def desparqueo(self,user: Usuario):
         for i in range(len(self.espacios)): #puede ser mejorable guardando el espacio en el carro
@@ -218,13 +211,6 @@ def main():
                 k -= 1
             avl.insert(k,avl.root)
 
-    print()
-    print(avl.root.data)
-    print(avl.findMax(avl.root))
-    print(avl.findMin(avl.root))
-    print(avl.x)
-    for i in range(n):
-        if not avl.contains(i,avl.root): print(i,end = ':')
 
 if __name__ == "__main__":
     #main()

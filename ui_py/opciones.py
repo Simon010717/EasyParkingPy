@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:/Users/Simon/Desktop/EasyParkingPy/ui_py/opciones.ui'
+# Form implementation generated from reading ui file 'C:/Users/ADMIN/Desktop/EasyParkingPy/ui_py/opciones.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -102,6 +102,7 @@ class Ui_MainWindow(object):
         self.parquearButton.setGeometry(QtCore.QRect(40, 30, 451, 81))
         self.parquearButton.setObjectName("parquearButton")
         self.generarFacturaButton = QtWidgets.QPushButton(self.frame)
+<<<<<<< HEAD
         self.generarFacturaButton.setGeometry(QtCore.QRect(40, 340, 451, 61))
         self.generarFacturaButton.setObjectName("generarFacturaButton")
         self.modificarInfoButton = QtWidgets.QPushButton(self.frame)
@@ -109,6 +110,15 @@ class Ui_MainWindow(object):
         self.modificarInfoButton.setObjectName("modificarInfoButton")
         self.regresarButton = QtWidgets.QPushButton(self.frame)
         self.regresarButton.setGeometry(QtCore.QRect(40, 280, 111, 41))
+=======
+        self.generarFacturaButton.setGeometry(QtCore.QRect(40, 280, 451, 61))
+        self.generarFacturaButton.setObjectName("generarFacturaButton")
+        self.modificarInfoButton = QtWidgets.QPushButton(self.frame)
+        self.modificarInfoButton.setGeometry(QtCore.QRect(170, 360, 191, 21))
+        self.modificarInfoButton.setObjectName("modificarInfoButton")
+        self.regresarButton = QtWidgets.QPushButton(self.frame)
+        self.regresarButton.setGeometry(QtCore.QRect(20, 400, 111, 41))
+>>>>>>> master
         self.regresarButton.setObjectName("regresarButton")
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -122,7 +132,11 @@ class Ui_MainWindow(object):
         self.generarFacturaButton.setText(_translate("MainWindow", "Factura"))
         self.modificarInfoButton.setText(_translate("MainWindow", "Modificar Información"))
         self.regresarButton.setText(_translate("MainWindow", "Regresar"))
+<<<<<<< HEAD
 import logo
+=======
+import logo_rc
+>>>>>>> master
 
 
 if __name__ == "__main__":
