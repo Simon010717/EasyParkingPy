@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
-    <height>551</height>
+    <width>418</width>
+    <height>530</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,6 +29,16 @@ color: black;
 }
 QFrame{
 background: white;
+}
+QPushButton{
+color: #2B3446;
+border-radius: 5px;
+background:white;
+font-size: 15px
+}
+QPushButton:hover{
+border-style:solid;
+border-width:1px;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -38,7 +48,7 @@ background: white;
       <x>0</x>
       <y>0</y>
       <width>421</width>
-      <height>551</height>
+      <height>531</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -51,9 +61,9 @@ background: white;
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>0</y>
+       <y>50</y>
        <width>421</width>
-       <height>431</height>
+       <height>371</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -454,7 +464,7 @@ background: white;
      <property name="geometry">
       <rect>
        <x>0</x>
-       <y>460</y>
+       <y>430</y>
        <width>421</width>
        <height>81</height>
       </rect>
@@ -474,9 +484,46 @@ background: white;
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+    <widget class="QLabel" name="label_11">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>0</y>
+       <width>41</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="logo.qrc">:/logo/ep_negro.svg</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="regresarButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>131</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Regresar</string>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="logo.qrc"/>
+ </resources>
  <connections/>
 </ui>
