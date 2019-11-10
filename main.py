@@ -119,8 +119,14 @@ class Ui_MainWindow(object):
         self.ui.setupUiFactura(self.mainWindow)
         self.mainWindow.show()
 
-
     def regresarParqueaderos(self):
+        self.mainWindow.hide()
+        self.mainWindow=QtWidgets.QMainWindow()
+        self.ui=Ui_MainWindow(self.mainWindow,self.ep)
+        self.ui.setupUiOpciones(self.mainWindow)
+        self.mainWindow.show()
+
+    def regresarFactura(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
         self.ui=Ui_MainWindow(self.mainWindow,self.ep)

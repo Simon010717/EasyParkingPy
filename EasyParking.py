@@ -157,6 +157,12 @@ class EasyParking:
                 if e.password == password: return index
                 return -1
         return -2
+
+    def buscarUsuario(self,ced):
+        for u in self.usuarios:
+            if ced == u.ced:
+                return u
+        return None
     
 class Parqueadero:
 
