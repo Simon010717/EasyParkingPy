@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'C:/Users/ADMIN/Desktop/EasyParkingPy/ui_py/parqueaderos.ui'
+# Form implementation generated from reading ui file 'C:/Users/Simon/Desktop/EasyParkingPy/ui_py/parqueaderos.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,9 +13,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(561, 519)
+        MainWindow.resize(1149, 669)
         MainWindow.setStyleSheet("*{\n"
 "font-family: segoe ui;\n"
+"/*background: #2B3446;*/\n"
+"background:transparent;\n"
 "}\n"
 "QLabel{\n"
 "font-size: 15px;\n"
@@ -28,7 +30,7 @@ class Ui_MainWindow(object):
 "color: #2B3446;\n"
 "border-radius: 15px;\n"
 "background:white;\n"
-"font-size: 30px;\n"
+"font-size: 20px;\n"
 "}\n"
 "QToolButton{\n"
 "background: transparent;\n"
@@ -52,41 +54,49 @@ class Ui_MainWindow(object):
 "font-size: 20px;\n"
 "background: transparent;\n"
 "color: red\n"
+"}\n"
+"QGroupBox{\n"
+"background: #2B3446;\n"
 "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setGeometry(QtCore.QRect(0, 0, 561, 521))
+        self.frame.setGeometry(QtCore.QRect(0, 0, 1111, 671))
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
-        self.horizontalLayoutWidget = QtWidgets.QWidget(self.frame)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(60, 20, 421, 411))
-        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.nombres = QtWidgets.QVBoxLayout()
-        self.nombres.setObjectName("nombres")
-        self.label_2 = QtWidgets.QLabel(self.horizontalLayoutWidget)
-        self.label_2.setObjectName("label_2")
-        self.nombres.addWidget(self.label_2)
-        self.label = QtWidgets.QLabel(self.horizontalLayoutWidget)
-        self.label.setObjectName("label")
-        self.nombres.addWidget(self.label)
-        self.horizontalLayout_3.addLayout(self.nombres)
-        self.botones = QtWidgets.QVBoxLayout()
-        self.botones.setObjectName("botones")
-        self.pushButton_2 = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.botones.addWidget(self.pushButton_2)
-        self.pushButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
-        self.pushButton.setObjectName("pushButton")
-        self.botones.addWidget(self.pushButton)
-        self.horizontalLayout_3.addLayout(self.botones)
         self.regresar = QtWidgets.QPushButton(self.frame)
-        self.regresar.setGeometry(QtCore.QRect(20, 460, 181, 41))
+        self.regresar.setGeometry(QtCore.QRect(30, 600, 181, 41))
         self.regresar.setObjectName("regresar")
+        self.scrollArea = QtWidgets.QScrollArea(self.frame)
+        self.scrollArea.setGeometry(QtCore.QRect(30, 30, 1041, 551))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName("scrollArea")
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1039, 549))
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.groupBox = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
+        self.groupBox.setGeometry(QtCore.QRect(0, 10, 1041, 541))
+        self.groupBox.setObjectName("groupBox")
+        self.formLayoutWidget = QtWidgets.QWidget(self.groupBox)
+        self.formLayoutWidget.setGeometry(QtCore.QRect(0, 10, 1041, 541))
+        self.formLayoutWidget.setObjectName("formLayoutWidget")
+        self.formLayout = QtWidgets.QFormLayout(self.formLayoutWidget)
+        self.formLayout.setContentsMargins(0, 0, 0, 0)
+        self.formLayout.setObjectName("formLayout")
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.horizontalLayoutWidget = QtWidgets.QWidget(self.frame)
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(380, 590, 321, 61))
+        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.regresar_2 = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.regresar_2.setObjectName("regresar_2")
+        self.horizontalLayout.addWidget(self.regresar_2)
+        self.regresar_3 = QtWidgets.QPushButton(self.horizontalLayoutWidget)
+        self.regresar_3.setObjectName("regresar_3")
+        self.horizontalLayout.addWidget(self.regresar_3)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -95,11 +105,10 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label_2.setText(_translate("MainWindow", "TextLabel"))
-        self.label.setText(_translate("MainWindow", "TextLabel"))
-        self.pushButton_2.setText(_translate("MainWindow", "PushButton"))
-        self.pushButton.setText(_translate("MainWindow", "PushButton"))
         self.regresar.setText(_translate("MainWindow", "Regresar"))
+        self.groupBox.setTitle(_translate("MainWindow", "."))
+        self.regresar_2.setText(_translate("MainWindow", "Regresar"))
+        self.regresar_3.setText(_translate("MainWindow", "Regresar"))
 
 
 if __name__ == "__main__":

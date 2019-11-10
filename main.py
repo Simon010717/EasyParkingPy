@@ -841,32 +841,48 @@ class Ui_MainWindow(object):
 
     def setupUiParqueaderos(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(561, 519)
+        MainWindow.resize(1107, 669)
         MainWindow.setStyleSheet("*{\n"
         "font-family: segoe ui;\n"
+        "/*background: #2B3446;*/\n"
         "}\n"
         "QLabel{\n"
-        "font-size: 15px;\n"
+        "font-size: 18px;\n"
         "color: white;\n"
         "}\n"
         "QFrame{\n"
         "background: #2B3446;\n"
         "}\n"
-        "QPushButton{\n"
-        "color: #2B3446;\n"
-        "border-radius: 15px;\n"
-        "background:white;\n"
-        "font-size: 30px;\n"
-        "}\n"
         "QToolButton{\n"
         "background: transparent;\n"
         "border:none;\n"
+        "}\n"
+        "#regresar{\n"
+        "color: #2B3446;\n"
+        "border-radius: 15px;\n"
+        "background:white;\n"
+        "font-size: 20px;\n"
+        "}\n"
+        "#regresar:hover{\n"
+        "background: #2B3446;\n"
+        "color: white;\n"
+        "border-color: white;\n"
+        "border-style: solid;\n"
+        "border-width: 2px;\n"
+        "}\n"
+        "QPushButton{\n"
+        "color: #2B3446;\n"
+        "border-radius: 5px;\n"
+        "background:white;\n"
+        "font-size: 18px;\n"
         "}\n"
         "QPushButton:hover{\n"
         "background: #2B3446;\n"
         "color: white;\n"
         "border-color: white;\n"
-        "border-radius: 15px;\n"
+        "border-radius: 5px;\n"
+        "border-style: solid;\n"
+        "border-width: 1px;\n"
         "}\n"
         "QLineEdit{\n"
         "background:transparent;\n"
@@ -880,48 +896,79 @@ class Ui_MainWindow(object):
         "font-size: 20px;\n"
         "background: transparent;\n"
         "color: red\n"
+        "}\n"
+        "QGroupBox{\n"
+        "background: #2B3446;\n"
         "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setGeometry(QtCore.QRect(0, 0, 561, 521))
+        self.frame.setGeometry(QtCore.QRect(0, 0, 1111, 671))
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
-        self.horizontalLayoutWidget = QtWidgets.QWidget(self.frame)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(60, 20, 421, 411))
-        self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.nombres = QtWidgets.QVBoxLayout()
-        self.nombres.setObjectName("nombres")
-        self.horizontalLayout_3.addLayout(self.nombres)
-        self.botones = QtWidgets.QVBoxLayout()
-        self.botones.setObjectName("botones")
-        self.horizontalLayout_3.addLayout(self.botones)
         self.regresar = QtWidgets.QPushButton(self.frame)
-        self.regresar.setGeometry(QtCore.QRect(20, 460, 181, 41))
+        self.regresar.setGeometry(QtCore.QRect(30, 600, 181, 41))
         self.regresar.setObjectName("regresar")
+        
+        self.scrollArea = QtWidgets.QScrollArea(self.frame)
+        self.scrollArea.setGeometry(QtCore.QRect(30, 30, 1041, 551))
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName("scrollArea")
 
-        self.nomLabels = []
+        self.formLayout = QtWidgets.QFormLayout()
+        self.formLayout.setContentsMargins(0, 0, 0, 0)
+        self.formLayout.setObjectName("formLayout")
 
-        for inL, label in enumerate(self.ep.parqueaderos):
-            label = QtWidgets.QLabel(self.horizontalLayoutWidget)
-            label.setObjectName(str("nombre_"+str(inL)))
-            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-            sizePolicy.setHorizontalStretch(0)
-            sizePolicy.setVerticalStretch(0)
-            sizePolicy.setHeightForWidth(label.sizePolicy().hasHeightForWidth())
-            label.setSizePolicy(sizePolicy)            
-            self.nombres.addWidget(label)
-            self.nomLabels.append(label)
+        self.groupBox = QtWidgets.QGroupBox(self.scrollArea)
+        self.groupBox.setGeometry(QtCore.QRect(0, 0, 1041, 551))
+        self.groupBox.setObjectName("groupBox")
+        self.groupBox.setLayout(self.formLayout)
+
+        self.scrollArea.setWidget(self.groupBox)
+        self.scrollArea.setWidgetResizable(True)
+
+        self.infoLines = []
+        self.elegirParqButtons = []
+        self.autoButtons = []
+
+        for intP, p in enumerate(self.ep.parqueaderos):
+            label = QtWidgets.QLabel(p.nombre) 
+            label.setObjectName(str("nombre_"+str(intP))) 
+            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed) 
+            sizePolicy.setHorizontalStretch(0) 
+            sizePolicy.setVerticalStretch(0) 
+            sizePolicy.setHeightForWidth(label.sizePolicy().hasHeightForWidth()) 
+            label.setSizePolicy(sizePolicy)             
+            self.infoLines.append(label)
+
+            button1 = QtWidgets.QPushButton("  Elegir  ")
+            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed) 
+            sizePolicy.setHorizontalStretch(0) 
+            sizePolicy.setVerticalStretch(0) 
+            sizePolicy.setHeightForWidth(button1.sizePolicy().hasHeightForWidth()) 
+            button1.setSizePolicy(sizePolicy)            
+            self.elegirParqButtons.append(button1)
+
+            button2 = QtWidgets.QPushButton("  Autom.  ")
+            sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed) 
+            sizePolicy.setHorizontalStretch(0) 
+            sizePolicy.setVerticalStretch(0) 
+            sizePolicy.setHeightForWidth(button2.sizePolicy().hasHeightForWidth()) 
+            button2.setSizePolicy(sizePolicy)            
+            self.autoButtons.append(button2)
+
+            lay = QtWidgets.QHBoxLayout()
+            lay.addWidget(QtWidgets.QLabel("  "))
+            lay.addWidget(label)           
+            lay.addWidget(button1)           
+            lay.addWidget(button2)
+            lay.addWidget(QtWidgets.QLabel("  "))
 
 
+            self.formLayout.addRow(lay)
+        
         MainWindow.setCentralWidget(self.centralwidget)
-
-        #botones
-        self.regresar.clicked.connect(self.regresarParqueaderos)
 
         self.retranslateUiParqueaderos(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -930,8 +977,8 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.regresar.setText(_translate("MainWindow", "Regresar"))
-        for inL in range(len(self.ep.parqueaderos)):
-            self.nomLabels[inL].setText(_translate("MainWindow", self.ep.parqueaderos[inL].nombre))   
+        #self.groupBox.setTitle(_translate("MainWindow", "GroupBox"))
+
 
 if __name__ == "__main__":
     import sys
@@ -939,6 +986,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow(MainWindow,ep)
-    ui.setupUiLogin(MainWindow)
+    ui.setupUiParqueaderos(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

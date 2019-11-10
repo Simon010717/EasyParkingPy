@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>561</width>
-    <height>519</height>
+    <width>1149</width>
+    <height>669</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,8 @@
   <property name="styleSheet">
    <string notr="true">*{
 font-family: segoe ui;
+/*background: #2B3446;*/
+background:transparent;
 }
 QLabel{
 font-size: 15px;
@@ -28,7 +30,7 @@ QPushButton{
 color: #2B3446;
 border-radius: 15px;
 background:white;
-font-size: 30px;
+font-size: 20px;
 }
 QToolButton{
 background: transparent;
@@ -52,6 +54,9 @@ font-size: 30px;
 font-size: 20px;
 background: transparent;
 color: red
+}
+QGroupBox{
+background: #2B3446;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -60,8 +65,8 @@ color: red
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>561</width>
-      <height>521</height>
+      <width>1111</width>
+      <height>671</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -70,66 +75,106 @@ color: red
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>30</y>
+       <width>1041</width>
+       <height>551</height>
+      </rect>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>1039</width>
+        <height>549</height>
+       </rect>
+      </property>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>10</y>
+         <width>1041</width>
+         <height>541</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>.</string>
+       </property>
+       <widget class="QWidget" name="formLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>10</y>
+          <width>1041</width>
+          <height>541</height>
+         </rect>
+        </property>
+        <layout class="QFormLayout" name="formLayout"/>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
     <widget class="QWidget" name="horizontalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>20</y>
-       <width>421</width>
-       <height>411</height>
+       <x>380</x>
+       <y>590</y>
+       <width>321</width>
+       <height>61</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMaximumSize</enum>
+      </property>
       <item>
-       <layout class="QVBoxLayout" name="nombres">
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QPushButton" name="regresar_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Regresar</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="botones">
-        <item>
-         <widget class="QPushButton" name="pushButton_2">
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QPushButton" name="regresar">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Regresar</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="regresar_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Regresar</string>
+        </property>
+       </widget>
       </item>
      </layout>
-    </widget>
-    <widget class="QPushButton" name="regresar">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>460</y>
-       <width>181</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Regresar</string>
-     </property>
     </widget>
    </widget>
   </widget>

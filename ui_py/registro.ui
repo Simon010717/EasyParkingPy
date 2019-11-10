@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>591</width>
-    <height>758</height>
+    <width>576</width>
+    <height>674</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -92,8 +92,8 @@ color: red
     <widget class="QPushButton" name="cancelar">
      <property name="geometry">
       <rect>
-       <x>220</x>
-       <y>660</y>
+       <x>230</x>
+       <y>600</y>
        <width>151</width>
        <height>41</height>
       </rect>
@@ -106,7 +106,7 @@ color: red
      <property name="geometry">
       <rect>
        <x>400</x>
-       <y>660</y>
+       <y>600</y>
        <width>151</width>
        <height>41</height>
       </rect>
@@ -119,7 +119,7 @@ color: red
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>630</y>
+       <y>570</y>
        <width>521</width>
        <height>31</height>
       </rect>
@@ -134,10 +134,10 @@ color: red
     <widget class="QLabel" name="label_11">
      <property name="geometry">
       <rect>
-       <x>500</x>
-       <y>10</y>
-       <width>71</width>
-       <height>91</height>
+       <x>510</x>
+       <y>0</y>
+       <width>51</width>
+       <height>71</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -157,7 +157,7 @@ color: red
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>100</y>
+       <y>50</y>
        <width>521</width>
        <height>516</height>
       </rect>
