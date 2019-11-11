@@ -182,7 +182,6 @@ class AvlTree(BinarySearchTree):
 
     def __init__(self):
         self.root = None
-        self.x = 0
     
     def singleRotationR(self,t):
         temp = t.left
@@ -213,7 +212,6 @@ class AvlTree(BinarySearchTree):
             t = self.AvlNode()
             t.data = x
             t.height = 1
-            self.x += 1
         if x == t.data:
             return t
         elif x < t.data:
@@ -233,13 +231,13 @@ class AvlTree(BinarySearchTree):
         if t is None: return None
         if x > t.data: 
             t.right = self.remove(x,t.right)
-            if super().height(t.right) - super().height(t.left) == 2:
-                if t.left.data > x: t = self.singleRotationL(t)
-                else: t = self.rotationRL(t)
+            if super().height(t.left) - super().height(t.right) == 2:
+                if x < t.left.data: t = self.singleRotationR(t)
+                else: t = self.rotationLR(t)
         elif  x < t.data:
             t.left = self.remove(x,t.left)
             if super().height(t.right) - super().height(t.left) == 2:
-                if t.left.data > x: t = self.singleRotationL(t)
+                if x >  t.right.data: t = self.singleRotationL(t)
                 else: t = self.rotationRL(t)
         elif t.right is not None and t.left is not None:
             t.data = self.findMax(t.right)
@@ -264,6 +262,120 @@ class AvlTree(BinarySearchTree):
         else:
             return self.siguiente(x-1,n)
 
+    def siguienteLibre(self,x,n):
+        siguiente = self.siguiente(x,n)        
+        if siguiente is not None:
+            return siguiente
+        else:
+            k = n-1
+            while self.contains(k,self.root):
+                k -= 1
+            return k
+'''
+class ObjAvlTree:
+    def __init__(self,capacity):
+        self.tree = [None]*capacity
+        self.capacity = capacity
+    
+
+    def _left(self,n):
+        return 2*n
+    
+    def _right(self,n):
+        return 2*n+1
+
+
+    def singleRotationR(self,x):
+        print("RR")
+        temp = self._left(x)
+        self.tree[self._left(x)] = self.tree[self._right(temp)]
+        self.tree[self._right(temp)] = self.tree[x]
+        self.tree[x] = self.tree[temp]
+        return x
+
+    def singleRotationL(self,x):
+        print(f"LL {x}")
+        print(self.tree)
+        temp = self.tree[self._right(x)]
+        self.tree[self._right(x)] = self.tree[self._left(temp)]
+        self.tree[self._left(temp)] = self.tree[x]
+        self.tree[x] = self.tree[temp]
+        print(self.tree)
+        return x
+
+    def rotationLR(self,x):
+        self.singleRotationL(self._right(x))
+        self.singleRotationR(x)
+        return x
+    
+    def rotationRL(self,x):
+        self.singleRotationR(self._left(x))
+        self.singleRotationL(x)
+        return x
+
+    def insert(self, val, obj, x):
+        if x >= self.capacity or x < 1: return -1 
+        if self.tree[x] is None:
+            self.tree[x] = [val,obj,1]
+        if val == self.tree[x][0]:
+            return x
+        elif val < self.tree[x][0]:
+            self.insert(val,obj,self._left(x))
+            if self.height(self._left(x)) - self.height(self._right(x))  == 2:
+                print(f"Rot l{self.height(self._left(x))}  r{self.height(self._right(x))}")
+                if val < self.tree[self._left(x)][0]: self.singleRotationR(x)
+                else: self.rotationLR(x)
+        elif val > self.tree[x][0]: 
+            self.insert(val,obj,self._right(x))
+            if self.height(self._right(x)) - self.height(self._left(x))  == 2:
+                print(f"Rot l{self.height(self._left(x))}  r{self.height(self._right(x))}")
+                if val > self.tree[self._right(x)][0]: self.singleRotationL(x)
+                else: self.rotationRL(x)
+        print(f"try {x}")
+        self.tree[x][2] = max(self.height(self._right(x)),self.height(self._left(x))) + 1
+        print(self.tree)
+        return x
+    
+    def remove(self,val,x):
+        if x >= self.capacity or x < 1: return -1
+        if self.tree[x] is None: return -1
+        elif val > self.tree[x][0]: 
+            self.remove(x,val,self._right(x))
+            if self.height(self._left(x)) - self.height(self._right(x))  == 2:
+                if val < self.tree[self._left(x)][0]: self.singleRotationR(x)
+                else: self.rotationLR(x)
+        elif  val < self.tree[x][0]:
+            self.remove(x,val,self._left(x))
+            if self.height(self._right(x)) - self.height(self._left(x))  == 2:
+                if val > self.tree[self._right(x)][0]: self.singleRotationL(x)
+                else: self.rotationRL(x)
+        elif self.tree[self._right(x)] is not None and self.tree[self._left(x)] is not None:
+            m = self.findMax(self._right(x))
+            self.tree[x] = [self.tree[m][0],self.tree[m][1],0]
+            self.remove(self.tree[self._right(x)][0],self._right(x))
+        else:
+            if self.tree[self._left(x)] is None:
+                return self._right(x)
+            else:
+                return self._left(x)
+        self.tree[x][2] = max(self.height(self._right(x)),self.height(self._left(x))) + 1
+        return x
+
+    def findMin(self,x):
+        if self.tree[self._left(x)] is None: return x
+        else: return self.findMin(self._left(x))
+
+    def findMax(self,x):
+        if self.tree[self._right(x)] is None: return x
+        else: return self.findMax(self._right(x))
+
+    def height(self,x):
+        if self.tree[x] is None: return 0
+        if self.tree[self._left(x)] is None and self.tree[self._right(x)] is None: return 1
+        elif self.tree[self._left(x)] is None: return self.height(self._right(x))+1
+        elif self.tree[self._right(x)] is None: return self.height(self._left(x))+1
+        else: return max(self.height(self._right(x)),self.height(self._left(x))) + 1
+'''
 class BinaryHeap():
     def __init__(self,capacity):
         self.capacity = capacity

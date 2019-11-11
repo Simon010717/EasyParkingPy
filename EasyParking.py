@@ -6,6 +6,7 @@ class Carro:
     def __init__ (self, placa):
         self.placa = placa
         self.enParqueo = False
+        self.esp = None
 
 class Persona:
     def __init__ (self, ced, nickname, password, nombre, apellido, edad, email=None, direccion=None, tel=None):
@@ -52,8 +53,9 @@ class EasyParking:
 
     def addParqueaderos(self):
         n = len(os.listdir(self.parqueaderosRoute))
-        for i in range(n):
-            with open(self.parqueaderosRoute+"/p"+str(i),"r") as f:
+        #print(f"n: {n}")
+        for p in range(n):
+            with open(self.parqueaderosRoute+"/p"+str(p),"r") as f:
                 data = f.readlines()
             data[0] = data[0].rstrip('\n')
             self.addParqueadero(data[0].split('*'),True)
@@ -61,14 +63,14 @@ class EasyParking:
             for b in range (len(data[1])):
                 if data[1][b] == '1': ocupados.append(b)
             l = 2
-            for p in ocupados:
+            for e in ocupados:
                 info = []
                 info = info + data[l].split('*')
                 info[0] = info[0]
                 info[1] = info[1].rstrip('\n')
-                if self.buscarUsuario(info[1]) is not None:
-                    self.parqueaderos[i].espacios[p] = Espacio(p,info[0],self.buscarUsuario(info[1]).carro,False)
-                    self.parqueaderos[i].espaciosTree.root = self.parqueaderos[i].espaciosTree.insert(p,self.parqueaderos[i].espaciosTree.root)
+                u = self.buscarUsuario(info[1])
+                #print(f"u placa: {u.carro.placa}")
+                self.parqueaderos[p].parqueo(u,p,e,True)
                 l+=1
     
     def addParqueadero(self,info,verified):
@@ -177,14 +179,29 @@ class Parqueadero:
         self.direccion = direccion
         self.tel = tel
         self.gerente = gerente
+
+        self.parqueaderosRoute = "parqueaderos"
         
     def addEspacio(self):
-        self.espacios.append(Espacio(self.espaciosTotales+1))   
+        self.espacios.append(Espacio(self.espaciosTotales+1))
 
-    def desparqueo(self,user: Usuario):
-        for i in range(len(self.espacios)): #puede ser mejorable guardando el espacio en el carro
-            if(espacios[i].carro.placa == user.carro.placa):
-                self.espacios.pop(i)
+    def parqueo(self,user,inP,e,verified):
+        print(user,inP,e)
+        if user is not None and user.carro is not None and not user.carro.enParqueo:
+            self.espacios[e] = Espacio(e,int(time.time()),user.carro,False)
+            self.espaciosTree.insert(e,self.espaciosTree.root)
+            user.carro.enParqueo = True
+            user.carro.esp = (self.cod,inP,e)
+            if not verified:
+                with open(self.parqueaderosRoute+"/p"+str(inP),"r") as f:
+                    data = f.readlines()
+                    print(data)
+                with open(self.parqueaderosRoute+"/p"+str(inP),"w") as f:   
+                    data[1]=data[1][0:e]+"1"+data[1][e:]
+                    data.append(str(int(time.time()))+"*"+user.ced)
+                    f.write("".join(data))
+                    
+            
 
 class Test:
     def rndStr(self,n):
@@ -216,10 +233,11 @@ def main():
             while avl.contains(k,avl.root):
                 k -= 1
             avl.insert(k,avl.root)
+    return
 
 
 if __name__ == "__main__":
     #main()
-    print("done")
+    eo = EasyParking()
 
     

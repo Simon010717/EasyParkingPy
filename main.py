@@ -9,7 +9,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog, QMainWindow, QWidget, QDesktopWidget, QLabel,QPushButton
-import EasyParking
+import EasyParking, random
 
 
 
@@ -18,6 +18,8 @@ class Ui_MainWindow(object):
     def __init__(self,mainWin,ep):
         self.mainWindow = mainWin
         self.ep = ep
+        self.indexUsuario = -1
+        self.indexEmpleado = -1
 
     def registroLogin(self):
         self.mainWindow.hide()
@@ -69,9 +71,9 @@ class Ui_MainWindow(object):
     def loginLogin(self):
         tNickname = self.usernameLine.text()
         tPassword = self.passwordLine.text()
-        if self.adminButton.clicked:
+        if not self.adminButton.isChecked():
             self.indexUsuario = self.ep.checkLogin(tNickname,tPassword)
-
+            print(f"hello {self.indexUsuario} p: {self.ep.usuarios[self.indexUsuario].carro.enParqueo}")
             if self.indexUsuario > -1:
                 self.mainWindow.hide()
                 self.mainWindow=QtWidgets.QMainWindow()
@@ -96,14 +98,12 @@ class Ui_MainWindow(object):
             elif self.indexEmpleado == -2:
                 self.ErrorLabel.setText("Administrador no encontrado")
 
-
     def parquearOpciones(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
         self.ui=Ui_MainWindow(self.mainWindow,self.ep)
         self.ui.setupUiParqueaderos(self.mainWindow)
         self.mainWindow.show()
-
 
     def regresarOpciones(self):
         self.mainWindow.hide()
@@ -138,6 +138,13 @@ class Ui_MainWindow(object):
         centerPoint = self.mainWindow.frameGeometry().center()
         qtRectangle.moveCenter(centerPoint)
         self.frame.move(qtRectangle.topLeft())
+
+    def autoParqueo(self,p,inP):
+        e = p.espaciosTree.siguienteLibre(p.ocupados+1,p.totales)
+        print(f"e: {e}")
+        if e > -1:
+            p.parqueo(self.ep.usuarios[self.indexUsuario],inP,e,False)
+            print(f"carro: {self.ep.usuarios[self.indexUsuario].carro.placa} {self.ep.usuarios[self.indexUsuario].carro.esp}")
 
     def setupUiLogin(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -233,6 +240,7 @@ class Ui_MainWindow(object):
         #botones
         self.registerButton.clicked.connect(self.registroLogin)
         self.loginButton.clicked.connect(self.loginLogin)
+        self.adminButton.clicked.connect(self.pp)
 
         self.retranslateUiLogin(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -438,6 +446,9 @@ class Ui_MainWindow(object):
         self.label_9.setText(_translate("MainWindow", "Teléfono:"))
 
     def setupUiOpciones(self, MainWindow):
+        print(f"carro: {self.ep.usuarios[self.indexUsuario].carro.placa} {self.ep.usuarios[self.indexUsuario].carro.esp}")
+
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(530, 459)
         MainWindow.setStyleSheet("*{\n"
@@ -549,7 +560,10 @@ class Ui_MainWindow(object):
     def retranslateUiOpciones(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.parquearButton.setText(_translate("MainWindow", "Parquear"))
+        if self.ep.usuarios[self.indexUsuario].carro.enParqueo:
+            print(f"p?: {self.ep.usuarios[self.indexUsuario].carro.enParqueo}")
+            self.parquearButton.setText(_translate("MainWindow", "Factura"))
+        else: self.parquearButton.setText(_translate("MainWindow", "Parquear"))
         self.generarFacturaButton.setText(_translate("MainWindow", "Factura"))
         self.modificarInfoButton.setText(_translate("MainWindow", "Modificar Información"))
         self.regresarButton.setText(_translate("MainWindow", "Regresar"))
@@ -813,7 +827,7 @@ class Ui_MainWindow(object):
         self.label_11.setGeometry(QtCore.QRect(370, 0, 41, 51))
         self.label_11.setStyleSheet("")
         self.label_11.setText("")
-        self.label_11.setPixmap(QtGui.QPixmap(":/logo/ep_negro.svg"))
+        self.label_11.setPixmap(QtGui.QPixmap("logo/ep_negro.svg"))
         self.label_11.setScaledContents(True)
         self.label_11.setObjectName("label_11")
         self.regresarButton = QtWidgets.QPushButton(self.frame)
@@ -845,6 +859,7 @@ class Ui_MainWindow(object):
         MainWindow.setStyleSheet("*{\n"
         "font-family: segoe ui;\n"
         "/*background: #2B3446;*/\n"
+        "border: none;\n"
         "}\n"
         "QLabel{\n"
         "font-size: 18px;\n"
@@ -917,8 +932,9 @@ class Ui_MainWindow(object):
         self.scrollArea.setObjectName("scrollArea")
 
         self.formLayout = QtWidgets.QFormLayout()
-        self.formLayout.setContentsMargins(0, 0, 0, 0)
+        self.formLayout.setContentsMargins(0, 7, 0, 7)
         self.formLayout.setObjectName("formLayout")
+
 
         self.groupBox = QtWidgets.QGroupBox(self.scrollArea)
         self.groupBox.setGeometry(QtCore.QRect(0, 0, 1041, 551))
@@ -932,9 +948,9 @@ class Ui_MainWindow(object):
         self.elegirParqButtons = []
         self.autoButtons = []
 
-        for intP, p in enumerate(self.ep.parqueaderos):
+        for inP, p in enumerate(self.ep.parqueaderos):
             label = QtWidgets.QLabel(p.nombre) 
-            label.setObjectName(str("nombre_"+str(intP))) 
+            label.setObjectName(str("nombre_"+str(inP))) 
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed) 
             sizePolicy.setHorizontalStretch(0) 
             sizePolicy.setVerticalStretch(0) 
@@ -942,11 +958,12 @@ class Ui_MainWindow(object):
             label.setSizePolicy(sizePolicy)             
             self.infoLines.append(label)
 
-            button1 = QtWidgets.QPushButton("  Elegir  ")
+            button1 = QtWidgets.QPushButton("   Elegir   ")
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed) 
             sizePolicy.setHorizontalStretch(0) 
             sizePolicy.setVerticalStretch(0) 
             sizePolicy.setHeightForWidth(button1.sizePolicy().hasHeightForWidth()) 
+            #---------
             button1.setSizePolicy(sizePolicy)            
             self.elegirParqButtons.append(button1)
 
@@ -955,18 +972,24 @@ class Ui_MainWindow(object):
             sizePolicy.setHorizontalStretch(0) 
             sizePolicy.setVerticalStretch(0) 
             sizePolicy.setHeightForWidth(button2.sizePolicy().hasHeightForWidth()) 
-            button2.setSizePolicy(sizePolicy)            
+            button2.setSizePolicy(sizePolicy)
+            #---------
+            button2.clicked.connect(lambda: self.autoParqueo(p,len(self.ep.parqueaderos)-inP-1))
             self.autoButtons.append(button2)
+            
 
             lay = QtWidgets.QHBoxLayout()
-            lay.addWidget(QtWidgets.QLabel("  "))
+            lay.setContentsMargins(30,0,30,0)
             lay.addWidget(label)           
             lay.addWidget(button1)           
             lay.addWidget(button2)
-            lay.addWidget(QtWidgets.QLabel("  "))
 
 
             self.formLayout.addRow(lay)
+
+        #botones
+        self.regresar.clicked.connect(self.regresarParqueaderos)
+        
         
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -980,12 +1003,23 @@ class Ui_MainWindow(object):
         #self.groupBox.setTitle(_translate("MainWindow", "GroupBox"))
 
 
+    def pp(self):
+        return
+
 if __name__ == "__main__":
+    '''
+    for i in range(30):
+        lines = []
+        lines.append(f"Parqueadero{i}*{i}*Av. Calle{i} # {i+20} 65*2314506*Tomas Aparicio*10*0\n")
+        lines.append("0000000000\n")
+        with open(f"parqueaderos/p{i}","w") as f:
+            f.writelines(lines)
+    '''
     import sys
     ep = EasyParking.EasyParking()
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow(MainWindow,ep)
-    ui.setupUiParqueaderos(MainWindow)
+    ui.setupUiLogin(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
