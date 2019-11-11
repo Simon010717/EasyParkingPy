@@ -4,5 +4,8 @@
     <file>logo/ep_blanco.svg</file>
     <file>logo/easy_negro.svg</file>
     <file>logo/ep_negro.svg</file>
+    <file>logo/addButton.png</file>
+    <file>logo/undoButton.png</file>
+    <file>logo/redoButton.png</file>
 </qresource>
 </RCC>

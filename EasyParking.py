@@ -51,9 +51,10 @@ class EasyParking:
         self.empleados = []
         self.addEmpleados()
 
+        for u in self.usuarios: print(u.carro.enParqueo)
+
     def addParqueaderos(self):
         n = len(os.listdir(self.parqueaderosRoute))
-        #print(f"n: {n}")
         for p in range(n):
             with open(self.parqueaderosRoute+"/p"+str(p),"r") as f:
                 data = f.readlines()
@@ -69,7 +70,6 @@ class EasyParking:
                 info[0] = info[0]
                 info[1] = info[1].rstrip('\n')
                 u = self.buscarUsuario(info[1])
-                #print(f"u placa: {u.carro.placa}")
                 self.parqueaderos[p].parqueo(u,p,e,True)
                 l+=1
     
@@ -95,7 +95,7 @@ class EasyParking:
     def addUsuarioArr(self,info,verified):
         if len(info) < 7: return None
         if not verified:
-            check = self.checkInfo(info)
+            check = self.checkInfoUsuario(info)
             if check < 3: return check
 
         line = '*'.join(info)
@@ -110,6 +110,13 @@ class EasyParking:
                 if len(self.usuarios) > 1: f.write('\n')
                 f.writelines(line)
 
+        return 3
+    
+    def checkInfoUsuario(self,info):
+        for u in self.usuarios:
+            if u.ced == info[0]: return 0
+            elif u.nickname == info[1]: return 1
+            elif u.password == info[2]: return 2
         return 3
     
     def checkLogin(self,nickname,password):
@@ -160,6 +167,12 @@ class EasyParking:
                 return -1
         return -2
 
+    def checkInfoEmpleado(self,info):
+        for e in self.empleados:
+            if e.ced == info[0]: return 0
+            elif e.nickname == info[1]: return 1
+        return 3
+
     def buscarUsuario(self,ced):
         for u in self.usuarios:
             if ced == u.ced:
@@ -186,7 +199,6 @@ class Parqueadero:
         self.espacios.append(Espacio(self.espaciosTotales+1))
 
     def parqueo(self,user,inP,e,verified):
-        print(user,inP,e)
         if user is not None and user.carro is not None and not user.carro.enParqueo:
             self.espacios[e] = Espacio(e,int(time.time()),user.carro,False)
             self.espaciosTree.insert(e,self.espaciosTree.root)
@@ -198,7 +210,7 @@ class Parqueadero:
                     print(data)
                 with open(self.parqueaderosRoute+"/p"+str(inP),"w") as f:   
                     data[1]=data[1][0:e]+"1"+data[1][e:]
-                    data.append(str(int(time.time()))+"*"+user.ced)
+                    data.append(str(int(time.time()))+"*"+user.ced+"\n")
                     f.write("".join(data))
                     
             

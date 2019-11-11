@@ -322,8 +322,8 @@ color: red
   </widget>
  </widget>
  <resources>
-  <include location="../logo.qrc"/>
-  <include location="../logo.qrc"/>
+  <include location="logo.qrc"/>
+  <include location="logo.qrc"/>
   <include location="logo.qrc"/>
  </resources>
  <connections/>
