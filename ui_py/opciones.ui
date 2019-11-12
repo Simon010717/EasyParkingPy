@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
+    <width>528</width>
     <height>459</height>
    </rect>
   </property>
@@ -57,22 +57,17 @@ color:#2B3446;
 border: none
 }
 #regresarButton{
-font-size:15px;
-border-radius: 10px;
 color: #2B3446;
+border-radius: 15px;
 background:white;
+font-size: 30px;
 }
-
 #regresarButton:hover{
-background:transparent;
+background: #2B3446;
 color: white;
 border-color: white;
-border-radius: 10px;
-border-width: 2px;
-border-style: solid;
+border-radius: 15px;
 }
-
-
 QLineEdit{
 background:transparent;
 color: white;
@@ -121,24 +116,11 @@ text-decoration:underline;
       <string>Parquear</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="generarFacturaButton">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>280</y>
-       <width>451</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Factura</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="modificarInfoButton">
      <property name="geometry">
       <rect>
-       <x>170</x>
-       <y>360</y>
+       <x>300</x>
+       <y>400</y>
        <width>191</width>
        <height>21</height>
       </rect>
@@ -150,10 +132,10 @@ text-decoration:underline;
     <widget class="QPushButton" name="regresarButton">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>400</y>
-       <width>111</width>
-       <height>41</height>
+       <x>50</x>
+       <y>370</y>
+       <width>191</width>
+       <height>61</height>
       </rect>
      </property>
      <property name="text">
@@ -164,7 +146,7 @@ text-decoration:underline;
   </widget>
  </widget>
  <resources>
-  <include location="../logo.qrc"/>
+  <include location="logo.qrc"/>
   <include location="logo.qrc"/>
  </resources>
  <connections/>

@@ -18,7 +18,7 @@ class Persona:
         self.edad = edad
         self.email = email
         self.direccion = direccion
-        self.tel = tel   
+        self.tel = tel
 
 class Usuario(Persona):
     def __init__(self, ced, nickname, password, nombre, apellido, edad, placa, email=None, direccion=None, tel=None):
@@ -26,9 +26,9 @@ class Usuario(Persona):
         super().__init__(ced, nickname, password, nombre, apellido, edad, email, direccion, tel)
 
 class Espacio:
-    def __init__ (self,cod,hora_incio = None,carro = None,libre = True):
+    def __init__ (self,cod,tiempoI = None,carro = None,libre = True):
         self.cod = cod
-        self.hora_incio = hora_incio
+        self.tiempoInicio = tiempoI
         self.libre = libre
         self.carro = carro
 
@@ -67,10 +67,11 @@ class EasyParking:
             for e in ocupados:
                 info = []
                 info = info + data[l].split('*')
-                info[0] = info[0]
                 info[1] = info[1].rstrip('\n')
                 u = self.buscarUsuario(info[1])
                 self.parqueaderos[p].parqueo(u,p,e,True)
+                self.parqueaderos[p].espacios[e].tiempoInicio = int(info[0])
+                print()
                 l+=1
     
     def addParqueadero(self,info,verified):

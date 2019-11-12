@@ -10,7 +10,8 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog, QMainWindow, QWidget, QDesktopWidget, QLabel,QPushButton
 import EasyParking, random
-
+from datetime import date, timedelta
+import time
 
 
 class Ui_MainWindow(object):
@@ -73,7 +74,6 @@ class Ui_MainWindow(object):
         tPassword = self.passwordLine.text()
         if not self.adminButton.isChecked():
             self.indexUsuario = self.ep.checkLogin(tNickname,tPassword)
-            print(f"indexU: {self.indexUsuario} p?: {self.ep.usuarios[self.indexUsuario].carro.enParqueo}")
             if self.indexUsuario > -1:
                 self.mainWindow.hide()
                 self.mainWindow=QtWidgets.QMainWindow()
@@ -445,8 +445,6 @@ class Ui_MainWindow(object):
         self.label_9.setText(_translate("MainWindow", "Teléfono:"))
 
     def setupUiOpciones(self, MainWindow):
-        print(f"opciones indexU: {self.indexUsuario} p?: {self.ep.usuarios[self.indexUsuario].carro.enParqueo}")
-
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(530, 459)
         MainWindow.setStyleSheet("*{\n"
@@ -492,22 +490,17 @@ class Ui_MainWindow(object):
         "border: none\n"
         "}\n"
         "#regresarButton{\n"
-        "font-size:15px;\n"
-        "border-radius: 10px;\n"
         "color: #2B3446;\n"
+        "border-radius: 15px;\n"
         "background:white;\n"
+        "font-size: 30px;\n"
         "}\n"
-        "\n"
         "#regresarButton:hover{\n"
-        "background:transparent;\n"
+        "background: #2B3446;\n"
         "color: white;\n"
         "border-color: white;\n"
-        "border-radius: 10px;\n"
-        "border-width: 2px;\n"
-        "border-style: solid;\n"
+        "border-radius: 15px;\n"
         "}\n"
-        "\n"
-        "\n"
         "QLineEdit{\n"
         "background:transparent;\n"
         "color: white;\n"
@@ -536,22 +529,20 @@ class Ui_MainWindow(object):
         self.parquearButton = QtWidgets.QPushButton(self.frame)
         self.parquearButton.setGeometry(QtCore.QRect(40, 30, 451, 81))
         self.parquearButton.setObjectName("parquearButton")
-        self.generarFacturaButton = QtWidgets.QPushButton(self.frame)
-        self.generarFacturaButton.setGeometry(QtCore.QRect(40, 280, 451, 61))
-        self.generarFacturaButton.setObjectName("generarFacturaButton")
         self.modificarInfoButton = QtWidgets.QPushButton(self.frame)
-        self.modificarInfoButton.setGeometry(QtCore.QRect(170, 360, 191, 21))
+        self.modificarInfoButton.setGeometry(QtCore.QRect(300, 400, 191, 21))
         self.modificarInfoButton.setObjectName("modificarInfoButton")
         self.regresarButton = QtWidgets.QPushButton(self.frame)
-        self.regresarButton.setGeometry(QtCore.QRect(20, 400, 111, 41))
+        self.regresarButton.setGeometry(QtCore.QRect(50, 370, 191, 61))
         self.regresarButton.setObjectName("regresarButton")
         MainWindow.setCentralWidget(self.centralwidget)
 
         #botones
-        self.generarFacturaButton.clicked.connect(self.facturaOpciones)
         self.regresarButton.clicked.connect(self.regresarOpciones)
-        self.parquearButton.clicked.connect(self.parquearOpciones)
-
+        if self.indexUsuario > -1:
+            if not self.ep.usuarios[self.indexUsuario].carro.enParqueo: self.parquearButton.clicked.connect(self.parquearOpciones)
+            else: self.parquearButton.clicked.connect(self.facturaOpciones)
+    
         self.retranslateUiOpciones(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -561,7 +552,6 @@ class Ui_MainWindow(object):
         if self.ep.usuarios[self.indexUsuario].carro.enParqueo:
             self.parquearButton.setText(_translate("MainWindow", "Factura"))
         else: self.parquearButton.setText(_translate("MainWindow", "Parquear"))
-        self.generarFacturaButton.setText(_translate("MainWindow", "Factura"))
         self.modificarInfoButton.setText(_translate("MainWindow", "Modificar Información"))
         self.regresarButton.setText(_translate("MainWindow", "Regresar"))
 
@@ -772,7 +762,7 @@ class Ui_MainWindow(object):
         self.tiempo.setText("")
         self.tiempo.setAlignment(QtCore.Qt.AlignCenter)
         self.tiempo.setObjectName("tiempo")
-        self.horizontalLayout_3.addWidget(self.tiempo)
+        self.verticalLayout.addWidget(self.tiempo)
         self.total = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.total.setEnabled(True)
         font = QtGui.QFont()
@@ -784,8 +774,8 @@ class Ui_MainWindow(object):
         self.total.setText("")
         self.total.setAlignment(QtCore.Qt.AlignCenter)
         self.total.setObjectName("total")
-        self.horizontalLayout_3.addWidget(self.total)
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
+        self.verticalLayout.addWidget(self.total)
+        #self.verticalLayout.addLayout(self.horizontalLayout_3)
         self.divisor3 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.divisor3.setEnabled(True)
         font = QtGui.QFont()
@@ -849,6 +839,29 @@ class Ui_MainWindow(object):
         self.divisor3.setText(_translate("MainWindow", "-------------------------------------------"))
         self.divisor4.setText(_translate("MainWindow", "-------------------------------------------"))
         self.regresarButton.setText(_translate("MainWindow", "Regresar"))
+        if self.indexUsuario > -1:
+            u = self.ep.usuarios[self.indexUsuario]
+            if u.carro.esp[0] == self.ep.parqueaderos[u.carro.esp[1]].cod:
+                p = self.ep.parqueaderos[self.ep.usuarios[self.indexUsuario].carro.esp[1]]
+
+            e = p.espacios[u.carro.esp[2]]
+
+            self.nombreParqueadero.setText(p.nombre)
+            self.direccion.setText(p.direccion)
+            self.ciudad.setText("Bogotá D.C")
+            self.telefono.setText(p.tel)
+            self.fecha.setText(str(date.today()))
+            self.nombre.setText(u.nombre)
+            self.cedula.setText(u.ced)
+            tI = time.asctime(time.localtime(e.tiempoInicio))[4:]
+            self.tiempoInicio.setText(tI)
+            tF = time.asctime( time.localtime(time.time()))[4:]
+            self.tiempoFin.setText(tF)
+            self.valor.setText("Valor por minuto: $60")
+            duracion = int(time.time()) -  e.tiempoInicio
+            print(f"tiempoI {e.tiempoInicio} duracion {duracion}")
+            self.tiempo.setText("Tiempo total: "+str(timedelta(seconds=duracion)))
+            self.total.setText("Valor total: $"+str(duracion))
 
     def setupUiParqueaderos(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -999,8 +1012,6 @@ class Ui_MainWindow(object):
         self.regresar.setText(_translate("MainWindow", "Regresar"))
     
     def setupUiEditarParq(self, MainWindow):
-        print(f"indexU: {self.indexUsuario} p?: {self.ep.usuarios[self.indexUsuario].carro.enParqueo}")
-
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1107, 669)
         MainWindow.setStyleSheet("*{\n"
@@ -1167,18 +1178,6 @@ class Ui_MainWindow(object):
         self.vLayout.addLayout(self.horizontalLayout_2)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         self.vLayout.addItem(spacerItem)
-
-        self.eliminarButtons = []
-        self.nombres = []
-        self.vaciarButtons = []
-        self.agregarButtons = []
-        self.gerentes = []
-        self.tels = []
-        self.direcciones = []
-        self.totales = []
-        self.ocupados = []
-        self.ps = []
-        self.x = []
 
         for inP, p in enumerate(self.ep.parqueaderos):
             self.fLayout = QtWidgets.QFormLayout()
