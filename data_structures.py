@@ -268,7 +268,7 @@ class AvlTree(BinarySearchTree):
             return siguiente
         else:
             k = n-1
-            while self.contains(k,self.root):
+            while self.contains(k,self.root) and k > -1:
                 k -= 1
             return k
 '''

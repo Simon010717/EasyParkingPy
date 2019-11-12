@@ -142,6 +142,14 @@ class Ui_MainWindow(object):
         e = p.espaciosTree.siguienteLibre(p.ocupados+1,p.totales)
         if e > -1:
             p.parqueo(self.ep.usuarios[self.indexUsuario],inP,e,False)
+            
+            self.mainWindow.hide()
+            self.mainWindow=QtWidgets.QMainWindow()
+            self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
+            self.ui.setupUiOpciones(self.mainWindow)
+            self.mainWindow.show()
+        return False
+        self.ErrorLabel.setText("")
 
     def setupUiLogin(self, MainWindow):
         self.indexEmpleado = -1
@@ -859,9 +867,10 @@ class Ui_MainWindow(object):
             self.tiempoFin.setText(tF)
             self.valor.setText("Valor por minuto: $60")
             duracion = int(time.time()) -  e.tiempoInicio
-            print(f"tiempoI {e.tiempoInicio} duracion {duracion}")
             self.tiempo.setText("Tiempo total: "+str(timedelta(seconds=duracion)))
             self.total.setText("Valor total: $"+str(duracion))
+
+            p.desparqueo(u,self.ep.usuarios[self.indexUsuario].carro.esp[1])
 
     def setupUiParqueaderos(self, MainWindow):
         MainWindow.setObjectName("MainWindow")

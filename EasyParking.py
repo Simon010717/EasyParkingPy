@@ -51,8 +51,6 @@ class EasyParking:
         self.empleados = []
         self.addEmpleados()
 
-        for u in self.usuarios: print(u.carro.enParqueo)
-
     def addParqueaderos(self):
         n = len(os.listdir(self.parqueaderosRoute))
         for p in range(n):
@@ -71,7 +69,6 @@ class EasyParking:
                 u = self.buscarUsuario(info[1])
                 self.parqueaderos[p].parqueo(u,p,e,True)
                 self.parqueaderos[p].espacios[e].tiempoInicio = int(info[0])
-                print()
                 l+=1
     
     def addParqueadero(self,info,verified):
@@ -202,19 +199,35 @@ class Parqueadero:
     def parqueo(self,user,inP,e,verified):
         if user is not None and user.carro is not None and not user.carro.enParqueo:
             self.espacios[e] = Espacio(e,int(time.time()),user.carro,False)
-            self.espaciosTree.insert(e,self.espaciosTree.root)
+            self.espaciosTree.root = self.espaciosTree.insert(e,self.espaciosTree.root)
             user.carro.enParqueo = True
             user.carro.esp = (self.cod,inP,e)
             if not verified:
                 with open(self.parqueaderosRoute+"/p"+str(inP),"r") as f:
                     data = f.readlines()
-                    print(data)
+                data[1]=data[1][0:e]+"1"+data[1][e+1:]
+                data.append(str(int(time.time()))+"*"+user.ced+"\n")
                 with open(self.parqueaderosRoute+"/p"+str(inP),"w") as f:   
-                    data[1]=data[1][0:e]+"1"+data[1][e:]
-                    data.append(str(int(time.time()))+"*"+user.ced+"\n")
                     f.write("".join(data))
-                    
+
+            self.ocupados += 1
+
+    def desparqueo(self,user,inP):
+        if user is not None and user.carro is not None and user.carro.enParqueo:
+            inE = user.carro.esp[2]
+            self.espacios[inE] = None
+            self.espaciosTree.remove(inE,self.espaciosTree.root)
+            user.carro.enParqueo = False
+            user.carro.esp = None
+            with open(self.parqueaderosRoute+"/p"+str(inP),"r") as f:
+                data = f.readlines()
             
+            data[1]=data[1][0:inE]+"0"+data[1][inE+1:]
+            data.pop(data[1].count("1",0,inE)+2)
+            with open(self.parqueaderosRoute+"/p"+str(inP),"w") as f:
+                f.write("".join(data)) 
+
+            self.ocupados -= 1          
 
 class Test:
     def rndStr(self,n):
@@ -233,24 +246,37 @@ class Test:
 
         return time.time() - start
 
-def main():
+def main2():
     n = 1000
     avl = dt.AvlTree()
     st = time.time()
-    for i in range(1,n+1):
-        siguiente = avl.siguiente(i,n)        
+    for i in range(1,n+40):
+        siguiente = avl.siguiente(i,n)
+        if i > n+1: print(siguiente)
+
         if siguiente is not None:
             avl.root = avl.insert(avl.siguiente(i,n),avl.root)
         else:
             k = n-1
-            while avl.contains(k,avl.root):
+            while avl.contains(k,avl.root) and k > -1:
                 k -= 1
+            if k > -1: return None
             avl.insert(k,avl.root)
+    avl.inOrder(avl.root)
+    return
+
+def main():
+    n = 1000
+    avl = dt.AvlTree()
+    for i in range(1,n+40):
+        siguiente = avl.siguienteLibre(i,n)
+        if siguiente > -1:
+            avl.root = avl.insert(avl.siguienteLibre(i,n),avl.root)
+    avl.inOrder(avl.root)
     return
 
 
 if __name__ == "__main__":
-    #main()
-    eo = EasyParking()
+    main()
 
     
