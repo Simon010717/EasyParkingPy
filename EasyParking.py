@@ -229,6 +229,16 @@ class Parqueadero:
 
             self.ocupados -= 1          
 
+    def vaciar(self,inP):
+        self.espaciosTree.makeEmpty()
+        self.espacios = [None]*self.totales
+        self.ocupados = 0
+        data = [self.nombre,self.cod,self.direccion,self.tel,self.gerente,str(self.totales),str(self.ocupados)]
+        data = "*".join(data) + "\n"
+        data += "0"*self.totales + "\n"
+        with open(self.parqueaderosRoute+"/p"+str(inP),"w") as f:
+            f.write(data)
+
 class Test:
     def rndStr(self,n):
         return "".join(random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz") for i in range(n))
@@ -277,6 +287,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    #main()
+    pass
 
     

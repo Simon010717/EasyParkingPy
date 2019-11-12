@@ -21,7 +21,7 @@ class Ui_MainWindow(object):
         self.ep = ep
         self.indexUsuario = indexUs
         self.indexEmpleado = indexEmp
-
+    
     def registroLogin(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
@@ -132,11 +132,12 @@ class Ui_MainWindow(object):
         self.ui.setupUiOpciones(self.mainWindow)
         self.mainWindow.show()
 
-    def resize(self):
-        qtRectangle = self.frame.frameGeometry()
-        centerPoint = self.mainWindow.frameGeometry().center()
-        qtRectangle.moveCenter(centerPoint)
-        self.frame.move(qtRectangle.topLeft())
+    def regresarEditarParq(self):
+        self.mainWindow.hide()
+        self.mainWindow=QtWidgets.QMainWindow()
+        self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
+        self.ui.setupUiLogin(self.mainWindow)
+        self.mainWindow.show()
 
     def autoParqueo(self,p,inP):
         e = p.espaciosTree.siguienteLibre(p.ocupados+1,p.totales)
@@ -148,8 +149,16 @@ class Ui_MainWindow(object):
             self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
             self.ui.setupUiOpciones(self.mainWindow)
             self.mainWindow.show()
-        return False
-        self.ErrorLabel.setText("")
+        
+        self.ErrorLabel.setText("Lo sentimos, este parqueadero no tiene cupos disponibles")
+
+    def vaciarParq(self,p,inP):
+        for u in self.ep.usuarios:
+            if u.carro.enParqueo and u.carro.esp[0] == p.cod:
+                u.carro.enParqueo = False
+                u.carro.esp = None
+        p.vaciar(inP)
+        self.ocupadosLab.setText("Ocupados: 0")
 
     def setupUiLogin(self, MainWindow):
         self.indexEmpleado = -1
@@ -556,7 +565,7 @@ class Ui_MainWindow(object):
 
     def retranslateUiOpciones(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "EasyParking"))
         if self.ep.usuarios[self.indexUsuario].carro.enParqueo:
             self.parquearButton.setText(_translate("MainWindow", "Factura"))
         else: self.parquearButton.setText(_translate("MainWindow", "Parquear"))
@@ -839,7 +848,7 @@ class Ui_MainWindow(object):
 
     def retranslateUiFactura(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "EasyParking"))
         self.title.setText(_translate("MainWindow", "Easy Parking S.A"))
         self.nit.setText(_translate("MainWindow", "NIT: 1234567989"))
         self.divisor1.setText(_translate("MainWindow", "-------------------------------------------"))
@@ -895,14 +904,12 @@ class Ui_MainWindow(object):
         "color: #2B3446;\n"
         "border-radius: 15px;\n"
         "background:white;\n"
-        "font-size: 20px;\n"
+        "font-size: 30px;\n"
         "}\n"
         "#regresar:hover{\n"
         "background: #2B3446;\n"
         "color: white;\n"
-        "border-color: white;\n"
-        "border-style: solid;\n"
-        "border-width: 2px;\n"
+        "border: none;\n"
         "}\n"
         "QPushButton{\n"
         "color: #2B3446;\n"
@@ -969,6 +976,11 @@ class Ui_MainWindow(object):
         self.scrollArea.setWidget(self.groupBox)
         self.scrollArea.setWidgetResizable(True)
 
+        self.ErrorLabel = QtWidgets.QLabel(self.frame)
+        self.ErrorLabel.setGeometry(QtCore.QRect(0, 590, 1011, 31))
+        self.ErrorLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.ErrorLabel.setObjectName("ErrorLabel")
+
 
         for inP, p in enumerate(self.ep.parqueaderos):
             label = QtWidgets.QLabel(p.nombre) 
@@ -987,7 +999,7 @@ class Ui_MainWindow(object):
             #---------
             button1.setSizePolicy(sizePolicy)
 
-            button2 = EspButton(self,"  Autom.  ",inP)
+            button2 = DButton(self,"  Autom.  ",inP)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed) 
             sizePolicy.setHorizontalStretch(0) 
             sizePolicy.setVerticalStretch(0) 
@@ -1017,7 +1029,7 @@ class Ui_MainWindow(object):
 
     def retranslateUiParqueaderos(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "EasyParking"))
         self.regresar.setText(_translate("MainWindow", "Regresar"))
     
     def setupUiEditarParq(self, MainWindow):
@@ -1082,18 +1094,17 @@ class Ui_MainWindow(object):
         "line-color:white;\n"
         "}\n"
         "#guardar,#regresar{\n"
+        "font-weight: normal;\n"
         "color: #2B3446;\n"
         "background: white;\n"
         "font-size: 30px;\n"
         "border-radius: 15px;\n"
         "}\n"
         "#guardar:hover,#regresar:hover{\n"
+        "font-weight: normal;\n"
         "color: white;\n"
-        "border-style: solid;\n"
-        "border-width: 1px;\n"
-        "border-color:white;\n"
-        "border-radius: 15px;\n"
         "background:#2B3446;\n"
+        "border: none;\n"
         "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -1249,20 +1260,22 @@ class Ui_MainWindow(object):
             spacerItem1 = QtWidgets.QSpacerItem(210, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
             self.fLayout.setItem(4, QtWidgets.QFormLayout.LabelRole, spacerItem1)
 
-            self.agregarEspButton = QtWidgets.QPushButton("AÑADIR ESPACIO")
-            self.agregarEspButton.setMinimumSize(QtCore.QSize(210, 0))
-            self.agregarEspButton.setObjectName("agregarEspButton")
-            self.fLayout.setWidget(13, QtWidgets.QFormLayout.LabelRole, self.agregarEspButton)
+            agregarEspButton = DButton(self,"AÑADIR ESPACIO",inP)
+            agregarEspButton.b.setMinimumSize(QtCore.QSize(210, 0))
+            agregarEspButton.b.setObjectName("agregarEspButton")
+            agregarEspButton.connectAgregarEsp()
+            self.fLayout.setWidget(13, QtWidgets.QFormLayout.LabelRole, agregarEspButton.b)
 
-            self.vaciarButton = QtWidgets.QPushButton("VACIAR")
+            vaciarButton = DButton(self,"VACIAR",inP)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
-            sizePolicy.setHeightForWidth(self.vaciarButton.sizePolicy().hasHeightForWidth())
-            self.vaciarButton.setSizePolicy(sizePolicy)
-            self.vaciarButton.setMinimumSize(QtCore.QSize(210, 0))
-            self.vaciarButton.setObjectName("vaciarButton")
-            self.fLayout.setWidget(5, QtWidgets.QFormLayout.LabelRole, self.vaciarButton)
+            sizePolicy.setHeightForWidth(vaciarButton.b.sizePolicy().hasHeightForWidth())
+            vaciarButton.b.setSizePolicy(sizePolicy)
+            vaciarButton.b.setMinimumSize(QtCore.QSize(210, 0))
+            vaciarButton.b.setObjectName("vaciarButton")
+            vaciarButton.connectVaciar(p)
+            self.fLayout.setWidget(5, QtWidgets.QFormLayout.LabelRole, vaciarButton.b)
             '''
             self.eliminarButton = QtWidgets.QPushButton("ELIMINAR")
             self.eliminarButton.setMinimumSize(QtCore.QSize(210, 0))
@@ -1271,10 +1284,10 @@ class Ui_MainWindow(object):
             self.fLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.eliminarButton)
             self.eliminarButtons.append(self.eliminarButton)
             '''
-            x = "eliminarButton"+str(inP)
-            eliminarButton = EspButton(self,"ELIMINAR",inP)
+            eliminarButton = DButton(self,"ELIMINAR",inP)
             eliminarButton.b.setMinimumSize(QtCore.QSize(210, 0))
             eliminarButton.b.setObjectName("eliminarButton"+str(inP))
+            eliminarButton.connectEliminar()
             self.fLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, eliminarButton.b)
 
             for i in range(4):
@@ -1284,7 +1297,7 @@ class Ui_MainWindow(object):
             self.vLayout.addLayout(self.fLayout)
 
         #botones
-        self.regresar.clicked.connect(self.regresarParqueaderos)
+        self.regresar.clicked.connect(self.regresarEditarParq)
 
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -1293,15 +1306,14 @@ class Ui_MainWindow(object):
 
     def retranslateUiEditarParq(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "EasyParking"))
         self.regresar.setText(_translate("MainWindow", "Regresar"))
         self.guardar.setText(_translate("MainWindow", "Guardar"))
-    
 
     def pp(self,x):
         print(f"{x} pressed")
 
-class EspButton():
+class DButton():
     def __init__ (self,mainWindow,text,x):
         self.mainWindow = mainWindow
         self.b = QtWidgets.QPushButton(text)
@@ -1312,6 +1324,12 @@ class EspButton():
     
     def connectAutoParq(self,p):
         self.b.clicked.connect(lambda: self.mainWindow.autoParqueo(p,self.x))
+
+    def connectVaciar(self,p):
+        self.b.clicked.connect(lambda: self.mainWindow.vaciarParq(p,self.x))
+
+    def connectAgregarEsp(self):
+        self.b.clicked.connect(lambda: self.mainWindow.pp(self.x))
 
 
 if __name__ == "__main__":

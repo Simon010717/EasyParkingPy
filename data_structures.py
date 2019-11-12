@@ -247,7 +247,7 @@ class AvlTree(BinarySearchTree):
                 return t.right
             else:
                 return t.left
-        t.height = max(super().height(t.left),super().height) + 1
+        t.height = max(super().height(t.left),super().height(t.right)) + 1
         return t
 
     def siguiente(self,x,n):
