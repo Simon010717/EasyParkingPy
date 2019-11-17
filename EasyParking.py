@@ -111,6 +111,36 @@ class EasyParking:
 
         return 3
     
+    def checkCambioInfo(self,info,uIndex):
+        for i,u in enumerate(self.usuarios):
+            if i != uIndex:
+                if u.ced == info[0]: return 0
+                elif u.nickname == info[1]: return 1
+                elif u.carro.placa == info[6]: return 2
+        return 3
+
+    def cambioInfo(self,info,uIndex):
+        check = self.checkCambioInfo(info,uIndex)
+        if check < 3: return check
+
+        line = '*'.join(info)
+
+        with open(self.usuariosRoute,"r") as f:
+            data = f.readlines()
+
+        found = False
+        for i,l in enumerate(data):
+            if l.split("*")[0] == self.usuarios[uIndex].ced:
+                found = True
+                data[i] = line+'\n'
+                with open(self.usuariosRoute,"w") as f:
+                    f.writelines("".join(data))
+        if not found: return
+
+        self.usuarios[uIndex] = Usuario(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7],info[8],info[9])
+
+        return 3
+
     def checkInfoUsuario(self,info):
         for u in self.usuarios:
             if u.ced == info[0]: return 0
@@ -241,62 +271,9 @@ class Parqueadero:
         with open(self.parqueaderosRoute+"/p"+str(inP),"w") as f:
             f.write(data)
 
-class Test:
-    def rndStr(self,n):
-        return "".join(random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz") for i in range(n))
-
-    def testDynamicArray(self,n,p):
-        start = time.time()
-        usuarios = []
-
-        for i in range(0,n):
-            usuarios.append(Usuario(self.rndStr(10),self.rndStr(10),self.rndStr(10),self.rndStr(10),self.rndStr(10),random.randint(18,70),self.rndStr(3)+str(random.randrange(1000))))
-            if(i%5 == 0):
-                usuarios[random.randrange(len(usuarios))].nombre = self.rndStr(10)
-            if(i%20):
-                usuarios.pop(random.randrange(len(usuarios)))
-
-        return time.time() - start
-
-def main2():
-    n = 1000
-    avl = dt.AvlTree()
-    st = time.time()
-    for i in range(1,n+40):
-        siguiente = avl.siguiente(i,n)
-        if i > n+1: print(siguiente)
-
-        if siguiente is not None:
-            avl.root = avl.insert(avl.siguiente(i,n),avl.root)
-        else:
-            k = n-1
-            while avl.contains(k,avl.root) and k > -1:
-                k -= 1
-            if k > -1: return None
-            avl.insert(k,avl.root)
-    avl.inOrder(avl.root)
-    return
-
 def main():
-    n = 1000
-    avl = dt.AvlTree()
-    for i in range(1,n+40):
-        siguiente = avl.siguienteLibre(i,n)
-        if siguiente > -1:
-            avl.root = avl.insert(avl.siguienteLibre(i,n),avl.root)
-    avl.inOrder(avl.root)
-    return
-
+    print("Ejecute main")
 
 if __name__ == "__main__":
-    for i in range(2,7):
-        inicio = time.time()
-        n = pow(10,i)
-        p = pow(10,i-1)
-        ep = EasyParking()
-        inter = time.time()
-        for i in range(p//100):
-            pp = random.randint(0,(p-1)//10)*10
-            esp =  ep.parqueaderos[pp].vaciar(pp)
-        print(f"n {n} p {p} agregacion {inter-inicio} eliminacion {time.time()-inter}")
+    main()
     
