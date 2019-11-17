@@ -21,6 +21,8 @@ class Ui_MainWindow(object):
         self.ep = ep
         self.indexUsuario = indexUs
         self.indexEmpleado = indexEmp
+        self.mainWindow.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint,False)
+
     
     def registroLogin(self):
         self.mainWindow.hide()
@@ -1228,7 +1230,6 @@ class Ui_MainWindow(object):
             self.fLayout.setWidget(12, QtWidgets.QFormLayout.LabelRole, self.label_7)
 
             self.nombreEdit = QtWidgets.QLineEdit(p.nombre)
-            self.nombreEdit.setText("")
             self.nombreEdit.setObjectName("nombreEdit")
             self.fLayout.setWidget(5, QtWidgets.QFormLayout.FieldRole, self.nombreEdit)
 
@@ -1249,7 +1250,7 @@ class Ui_MainWindow(object):
             self.totalesLab.setObjectName("totalesLab")
             self.fLayout.setWidget(17, QtWidgets.QFormLayout.LabelRole, self.totalesLab)
 
-            self.ocupadosLab = QtWidgets.QLabel("Ocupados:"+str(p.ocupados))
+            self.ocupadosLab = QtWidgets.QLabel("Ocupados: "+str(p.ocupados))
             self.ocupadosLab.setObjectName("ocupadosLab")
             self.fLayout.setWidget(17, QtWidgets.QFormLayout.FieldRole, self.ocupadosLab)
 
@@ -1346,6 +1347,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow(MainWindow,ep,-1,-1)
-    ui.setupUiEditarParq(MainWindow)
+    ui.setupUiLogin(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

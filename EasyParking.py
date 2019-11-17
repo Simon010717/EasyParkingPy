@@ -26,7 +26,7 @@ class Usuario(Persona):
         super().__init__(ced, nickname, password, nombre, apellido, edad, email, direccion, tel)
 
 class Espacio:
-    def __init__ (self,cod,tiempoI = None,carro = None,libre = True):
+    def __init__ (self,cod,tiempoI,carro = None,libre = True):
         self.cod = cod
         self.tiempoInicio = tiempoI
         self.libre = libre
@@ -86,9 +86,11 @@ class EasyParking:
         with open(self.usuariosRoute,"r") as f:
             data = f.readlines()
         
-        for line in data:
-            line = line.rstrip('\n')
-            self.addUsuarioArr(line.split("*"),True)
+        n = len(data)
+
+        for i in range(n):
+            data[i] = data[i].rstrip('\n')
+            self.addUsuarioArr(data[i].split("*"),True)
 
     def addUsuarioArr(self,info,verified):
         if len(info) < 7: return None
@@ -105,8 +107,7 @@ class EasyParking:
         
         if not verified:
             with open(self.usuariosRoute,"a") as f:
-                if len(self.usuarios) > 1: f.write('\n')
-                f.writelines(line)
+                f.writelines(line+'\n')
 
         return 3
     
@@ -114,7 +115,7 @@ class EasyParking:
         for u in self.usuarios:
             if u.ced == info[0]: return 0
             elif u.nickname == info[1]: return 1
-            elif u.password == info[2]: return 2
+            elif u.carro.placa == info[6]: return 2
         return 3
     
     def checkLogin(self,nickname,password):
@@ -192,13 +193,10 @@ class Parqueadero:
         self.gerente = gerente
 
         self.parqueaderosRoute = "parqueaderos"
-        
-    def addEspacio(self):
-        self.espacios.append(Espacio(self.espaciosTotales+1))
 
     def parqueo(self,user,inP,e,verified):
         if user is not None and user.carro is not None and not user.carro.enParqueo:
-            self.espacios[e] = Espacio(e,int(time.time()),user.carro,False)
+            self.espacios[e] = Espacio(e,int(time.time()), user.carro,False)
             self.espaciosTree.root = self.espaciosTree.insert(e,self.espaciosTree.root)
             user.carro.enParqueo = True
             user.carro.esp = (self.cod,inP,e)
@@ -211,6 +209,10 @@ class Parqueadero:
                     f.write("".join(data))
 
             self.ocupados += 1
+
+            return True
+
+        return False
 
     def desparqueo(self,user,inP):
         if user is not None and user.carro is not None and user.carro.enParqueo:
@@ -287,7 +289,14 @@ def main():
 
 
 if __name__ == "__main__":
-    #main()
-    pass
-
+    for i in range(2,7):
+        inicio = time.time()
+        n = pow(10,i)
+        p = pow(10,i-1)
+        ep = EasyParking()
+        inter = time.time()
+        for i in range(p//100):
+            pp = random.randint(0,(p-1)//10)*10
+            esp =  ep.parqueaderos[pp].vaciar(pp)
+        print(f"n {n} p {p} agregacion {inter-inicio} eliminacion {time.time()-inter}")
     
