@@ -19,8 +19,8 @@ class Ui_MainWindow(object):
     def __init__(self,mainWin,ep):
         self.mainWindow = mainWin
         self.ep = ep
-        self.indexUsuario = -1
-        self.indexEmpleado = -1
+        self.cedUsuario = -1
+        self.nickEmpleado = -1
         self.indexParq = -1
         self.mainWindow.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint,False)
 
@@ -28,34 +28,33 @@ class Ui_MainWindow(object):
         tNickname = self.usernameLine.text()
         tPassword = self.passwordLine.text()
         if not self.adminButton.isChecked():
-            self.indexUsuario = self.ep.checkLogin(tNickname,tPassword)
-            if self.indexUsuario > -1:
+            self.cedUsuario = self.ep.checkLogin(tNickname,tPassword)
+            if self.cedUsuario == -1:
+                self.ErrorLabel.setText("Contraseña incorrecta")
+            elif self.cedUsuario == -2:
+                self.ErrorLabel.setText("Usuario no encontrado")
+            else:
+                self.cedUsuario = int(self.cedUsuario.ced)
                 self.mainWindow.hide()
                 self.mainWindow=QtWidgets.QMainWindow()
-                #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
                 self.setupUiOpciones()
                 self.mainWindow.show()
-            elif self.indexUsuario == -1:
-                self.ErrorLabel.setText("Contraseña incorrecta")
-            elif self.indexUsuario == -2:
-                self.ErrorLabel.setText("Usuario no encontrado")
         else:
-            self.indexEmpleado = self.ep.checkLoginEmpleado(tNickname,tPassword)
-            if self.indexEmpleado > -1:
+            self.nickEmpleado = self.ep.checkLoginEmpleado(tNickname,tPassword)
+            if self.nickEmpleado == "-1":
+                self.ErrorLabel.setText("Contraseña de administrador incorrecta")
+            elif self.nickEmpleado == "-2":
+                self.ErrorLabel.setText("Administrador no encontrado")
+            else:
+                self.nickEmpleado = self.nickEmpleado.nickname
                 self.mainWindow.hide()
                 self.mainWindow=QtWidgets.QMainWindow()
-                #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
                 self.setupUiEditarParq()
                 self.mainWindow.show()
-            elif self.indexEmpleado == -1:
-                self.ErrorLabel.setText("Contraseña de administrador incorrecta")
-            elif self.indexEmpleado == -2:
-                self.ErrorLabel.setText("Administrador no encontrado")
 
     def registroLogin(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
         self.setupUiRegistro()
         self.mainWindow.show()
 
@@ -73,18 +72,16 @@ class Ui_MainWindow(object):
 
         info= [tCedula,tNickname,tPassword,tNombre,tApellido,tEdad,tPlaca,tEmail,tDireccion,tTelefono]
 
-        if "" in info:
+        if "" in info[0:6]:
             self.ErrorLabel.setText("*Todos los campos marcados son obligatorios")
             return
 
-        r = self.ep.cambioInfo(info,self.indexUsuario)
-
-        print(r)
+        r = self.ep.cambioInfo(info,self.cedUsuario)
+        self.cedUsuario = int(info[0])
 
         if r == 3:
             self.mainWindow.hide()
             self.mainWindow=QtWidgets.QMainWindow()
-            #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
             self.setupUiOpciones()
             self.mainWindow.show()
         elif r == 2:
@@ -97,14 +94,14 @@ class Ui_MainWindow(object):
     def cancelarInfo(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
+        
         self.setupUiOpciones()
         self.mainWindow.show()
 
     def cancelarRegistro(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
+        
         self.setupUiLogin()
         self.mainWindow.show()
     
@@ -122,7 +119,7 @@ class Ui_MainWindow(object):
 
         info= [tCedula,tNickname,tPassword,tNombre,tApellido,tEdad,tPlaca,tEmail,tDireccion,tTelefono]
 
-        if "" in info:
+        if "" in info[0:6]:
             self.ErrorLabel.setText("*Todos los campos marcados son obligatorios")
             return
 
@@ -131,7 +128,7 @@ class Ui_MainWindow(object):
         if r == 3:
             self.mainWindow.hide()
             self.mainWindow=QtWidgets.QMainWindow()
-            #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
+            
             self.setupUiLogin()
             self.mainWindow.show()
         elif r == 2:
@@ -144,49 +141,45 @@ class Ui_MainWindow(object):
     def parquearOpciones(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
+        
         self.setupUiParqueaderos()
         self.mainWindow.show()
 
     def regresarOpciones(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
+        
         self.setupUiLogin()
         self.mainWindow.show()
 
     def facturaOpciones(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
         self.setupUiFactura()
         self.mainWindow.show()
 
     def modificarInfo(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
         self.setupUiModificarInfo()
         self.mainWindow.show()
 
     def regresarParqueaderos(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
         self.setupUiOpciones()
         self.mainWindow.show()
 
     def regresarFactura(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
         self.setupUiOpciones()
         self.mainWindow.show()
 
     def regresarEditarParq(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
+        
         self.setupUiLogin()
         self.mainWindow.show()
 
@@ -194,15 +187,34 @@ class Ui_MainWindow(object):
         p = self.ep.parqueaderos[inP]
         e = p.espaciosTree.siguienteLibre(p.ocupados+1,p.totales)
         if e > -1:
-            p.parqueo(self.ep.usuarios[self.indexUsuario],inP,e,False)
+            p.parqueo(self.ep.usuarios.get(self.cedUsuario),inP,e,False)
             
             self.mainWindow.hide()
             self.mainWindow=QtWidgets.QMainWindow()
-            #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
+            
             self.setupUiOpciones()
             self.mainWindow.show()
         else:
             self.ErrorLabel.setText("Lo sentimos, este parqueadero no tiene cupos disponibles")
+
+    def elegirParq(self,inP,inE):
+        p = self.ep.parqueaderos[inP]
+
+        p.parqueo(self.ep.usuarios.get(self.cedUsuario),inP,inE,False)
+            
+        self.mainWindow.hide()
+        self.mainWindow=QtWidgets.QMainWindow()
+        
+        self.setupUiOpciones()
+        self.mainWindow.show()
+
+    def eleccionParq(self,inP): 
+        self.indexParq = inP 
+        self.mainWindow.hide() 
+        self.mainWindow=QtWidgets.QMainWindow()
+
+        self.setupUiEleccion(inP) 
+        self.mainWindow.show() 
 
     def vaciarParq(self,p,inP):
         for u in self.ep.usuarios:
@@ -213,11 +225,9 @@ class Ui_MainWindow(object):
         self.ocupadosLab.setText("Ocupados: 0")
 
     def setupUiLogin(self):
-
         self.mainWindow.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint,False)
 
         self.indexEmpleado = -1
-        self.indexUsuario = -1
 
         self.mainWindow.setObjectName("self.mainWindow")
         self.mainWindow.resize(531, 481)
@@ -617,8 +627,8 @@ class Ui_MainWindow(object):
 
         #botones
         self.regresarButton.clicked.connect(self.regresarOpciones)
-        if self.indexUsuario > -1:
-            if not self.ep.usuarios[self.indexUsuario].carro.enParqueo: self.parquearButton.clicked.connect(self.parquearOpciones)
+        if self.cedUsuario > -1:
+            if not self.ep.usuarios.get(self.cedUsuario).carro.enParqueo: self.parquearButton.clicked.connect(self.parquearOpciones)
             else: self.parquearButton.clicked.connect(self.facturaOpciones)
         self.modificarInfoButton.clicked.connect(self.modificarInfo)
     
@@ -628,7 +638,7 @@ class Ui_MainWindow(object):
     def retranslateUiOpciones(self):
         _translate = QtCore.QCoreApplication.translate
         self.mainWindow.setWindowTitle(_translate("self.mainWindow", "EasyParking"))
-        if self.ep.usuarios[self.indexUsuario].carro.enParqueo:
+        if self.ep.usuarios.get(self.cedUsuario).carro.enParqueo:
             self.parquearButton.setText(_translate("self.mainWindow", "Factura"))
         else: self.parquearButton.setText(_translate("self.mainWindow", "Parquear"))
         self.modificarInfoButton.setText(_translate("self.mainWindow", "Modificar Información"))
@@ -873,7 +883,6 @@ class Ui_MainWindow(object):
         self.divisor4.setEnabled(True)
         font = QtGui.QFont()
         font.setFamily("courier new")
-        
         font.setBold(True)
         font.setWeight(75)
         self.divisor4.setFont(font)
@@ -885,7 +894,23 @@ class Ui_MainWindow(object):
         self.codigoDeBarras.setGeometry(QtCore.QRect(0, 430, 421, 81))
         font = QtGui.QFont()
         font.setFamily("courier new")
-        
+
+        self.divisor5 = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.divisor5.setEnabled(True)
+        font = QtGui.QFont()
+        font.setFamily("courier new")
+        font.setBold(True)
+        font.setWeight(75)
+        self.divisor5.setFont(font)
+        self.divisor5.setAlignment(QtCore.Qt.AlignCenter)
+        self.divisor5.setObjectName("divisor5")
+        self.verticalLayout.addWidget(self.divisor5)
+        self.codigoDeBarras = QtWidgets.QLabel(self.frame)
+        self.codigoDeBarras.setEnabled(True)
+        self.codigoDeBarras.setGeometry(QtCore.QRect(0, 430, 421, 81))
+        font = QtGui.QFont()
+        font.setFamily("courier new")
+
         font.setBold(True)
         font.setWeight(75)
         self.codigoDeBarras.setFont(font)
@@ -921,10 +946,10 @@ class Ui_MainWindow(object):
         self.divisor3.setText(_translate("self.mainWindow", "-------------------------------------------"))
         self.divisor4.setText(_translate("self.mainWindow", "-------------------------------------------"))
         self.regresarButton.setText(_translate("self.mainWindow", "Regresar"))
-        if self.indexUsuario > -1:
-            u = self.ep.usuarios[self.indexUsuario]
+        if self.cedUsuario > -1:
+            u = self.ep.usuarios.get(self.cedUsuario)
             if u.carro.esp[0] == self.ep.parqueaderos[u.carro.esp[1]].cod:
-                p = self.ep.parqueaderos[self.ep.usuarios[self.indexUsuario].carro.esp[1]]
+                p = self.ep.parqueaderos[u.carro.esp[1]]
 
             e = p.espacios[u.carro.esp[2]]
 
@@ -943,8 +968,11 @@ class Ui_MainWindow(object):
             duracion = int(time.time()) -  e.tiempoInicio
             self.tiempo.setText("Tiempo total: "+str(timedelta(seconds=duracion)))
             self.total.setText("Valor total: $"+str(duracion))
+            puntos = duracion//10
+            u.puntos += puntos
+            self.divisor5.setText(str(u.puntos))
 
-            p.desparqueo(u,self.ep.usuarios[self.indexUsuario].carro.esp[1])
+            p.desparqueo(u,self.ep.usuarios.get(self.cedUsuario).carro.esp[1])
 
     def setupUiParqueaderos(self):
 
@@ -1386,6 +1414,7 @@ class Ui_MainWindow(object):
         self.guardar.setText(_translate("self.mainWindow", "Guardar"))
 
     def setupUiModificarInfo(self):
+        u = self.ep.usuarios.get(self.cedUsuario)
 
         self.mainWindow.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint,False)
         
@@ -1515,52 +1544,52 @@ class Ui_MainWindow(object):
         self.verticalLayout.setSpacing(8)
         self.verticalLayout.setObjectName("verticalLayout")
         self.cedula = QtWidgets.QLineEdit()
-        self.cedula.setText(self.ep.usuarios[self.indexUsuario].ced)
+        self.cedula.setText(u.ced)
         self.cedula.setStyleSheet("")
         self.cedula.setObjectName("cedula")
         self.verticalLayout.addWidget(self.cedula)
         self.nickname = QtWidgets.QLineEdit()
-        self.nickname.setText(self.ep.usuarios[self.indexUsuario].nickname)
+        self.nickname.setText(u.nickname)
         self.nickname.setStyleSheet("")
         self.nickname.setObjectName("nickname")
         self.verticalLayout.addWidget(self.nickname)
         self.password = QtWidgets.QLineEdit()
-        self.password.setText(self.ep.usuarios[self.indexUsuario].password)
+        self.password.setText(u.password)
         self.password.setStyleSheet("")
         self.password.setEchoMode(QtWidgets.QLineEdit.PasswordEchoOnEdit)
         self.password.setObjectName("password")
         self.verticalLayout.addWidget(self.password)
         self.nombre = QtWidgets.QLineEdit()
-        self.nombre.setText(self.ep.usuarios[self.indexUsuario].nombre)
+        self.nombre.setText(u.nombre)
         self.nombre.setStyleSheet("")
         self.nombre.setObjectName("nombre")
         self.verticalLayout.addWidget(self.nombre)
         self.apellido = QtWidgets.QLineEdit()
-        self.apellido.setText(self.ep.usuarios[self.indexUsuario].apellido)
+        self.apellido.setText(u.apellido)
         self.apellido.setStyleSheet("")
         self.apellido.setObjectName("apellido")
         self.verticalLayout.addWidget(self.apellido)
         self.edad = QtWidgets.QLineEdit()
-        self.edad.setText(self.ep.usuarios[self.indexUsuario].edad)
+        self.edad.setText(u.edad)
         self.edad.setStyleSheet("")
         self.edad.setObjectName("edad")
         self.verticalLayout.addWidget(self.edad)
         self.placa = QtWidgets.QLineEdit()
-        self.placa.setText(self.ep.usuarios[self.indexUsuario].carro.placa)
+        self.placa.setText(u.carro.placa)
         self.placa.setObjectName("placa")
         self.verticalLayout.addWidget(self.placa)
         self.email = QtWidgets.QLineEdit()
-        self.email.setText(self.ep.usuarios[self.indexUsuario].email)
+        self.email.setText(u.email)
         self.email.setStyleSheet("")
         self.email.setObjectName("email")
         self.verticalLayout.addWidget(self.email)
         self.direccion = QtWidgets.QLineEdit()
-        self.direccion.setText(self.ep.usuarios[self.indexUsuario].direccion)
+        self.direccion.setText(u.direccion)
         self.direccion.setStyleSheet("")
         self.direccion.setObjectName("direccion")
         self.verticalLayout.addWidget(self.direccion)
         self.telefono = QtWidgets.QLineEdit()
-        self.telefono.setText(self.ep.usuarios[self.indexUsuario].tel)
+        self.telefono.setText(u.tel)
         self.telefono.setStyleSheet("")
         self.telefono.setObjectName("telefono")
         self.verticalLayout.addWidget(self.telefono)
@@ -1697,13 +1726,11 @@ class Ui_MainWindow(object):
                 p.b.setMinimumSize(QtCore.QSize(114, 196))
                 p.b.setIconSize(QtCore.QSize(5, 5))
                 p.b.setObjectName("p"+str(i*10+j))
-                p.connectPrueba()
 
                 if self.ep.parqueaderos[inP].espacios[i*10+j] != None:
                     p.b.setStyleSheet("background-color: #fcd581")
-                    p.connectReserva()
                 else:
-                    p.connectPrueba()
+                    p.connectElegir(self.indexParq)
 
 
                 self.gridLayout.addWidget(p.b, i*3+1, j+1, 1, 1)
@@ -1722,23 +1749,15 @@ class Ui_MainWindow(object):
         self.mainWindow.setWindowTitle(_translate("self.mainWindow", "self.mainWindow"))
         self.regresar.setText(_translate("self.mainWindow", "Regresar"))
 
-    def eleccionParq(self,inP):
-        self.indexParq = inP
-        self.mainWindow.hide()
-        self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
-        self.setupUiEleccion(inP)
-        self.mainWindow.show()
-
     def cancelarElecccion(self):
         self.mainWindow.hide()
         self.mainWindow=QtWidgets.QMainWindow()
-        #self.ui=Ui_MainWindow(self.mainWindow,self.ep,self.indexUsuario,self.indexEmpleado)
+        
         self.setupUiParqueaderos()
         self.mainWindow.show()
 
     def reserva(self,inEsp):
-        self.ep.parqueaderos[self.indexParq].espacios[inEsp].reservas.insert(int(self.ep.usuarios[self.indexUsuario].ced))
+        self.ep.parqueaderos[self.indexParq].espacios[inEsp].reservas.insert(int(self.ep.usuarios.get(self.cedUsuario).ced))
         print(self.ep.parqueaderos[self.indexParq].espacios[inEsp].reservas.heap)
 
     def pp(self,x):
@@ -1762,14 +1781,17 @@ class DButton():
     def connectAgregarEsp(self):
         self.b.clicked.connect(lambda: self.mainWindow.pp(self.x))
 
-    def connectEleccion(self):
-        self.b.clicked.connect(lambda: self.mainWindow.eleccionParq(self.x))
+    def connectElegir(self,p):
+        self.b.clicked.connect(lambda: self.mainWindow.elegirParq(p,self.x))
 
     def connectPrueba(self):
         self.b.clicked.connect(lambda: self.mainWindow.pp(self.x))
 
     def connectReserva(self):
         self.b.clicked.connect(lambda: self.mainWindow.reserva(self.x))
+
+    def connectEleccion(self): 
+        self.b.clicked.connect(lambda: self.mainWindow.eleccionParq(self.x)) 
 
 class DEdit():
     def __init__(self,mainWindow,text,x):

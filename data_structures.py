@@ -1,3 +1,5 @@
+import random
+
 class ListNode:
     def __init__ (self, data, next):
         self.data = data
@@ -5,14 +7,14 @@ class ListNode:
     
 class LinearList:
     def __init__ (self):
-        self.front = None
+        self.head = None
         self.size = 0
     
     def isEmpty(self):
         return size == 0
     
     def getFront(self):
-        return front.data
+        return self.head.data
     
     def get (self, index):
         if index >= size or index<0: return None
@@ -59,16 +61,44 @@ class LinearList:
     def toString(self):
         print("[",end="")
         q = self.head
-        for i in range (size-1):
+        for i in range (self.size-1):
             print(q.data,end=",")
             q = q.next
-        print(q.data + "]",end="")
+        print(str(q.data) + "]")
+
+class OrderedList(LinearList):
+    def __init__(self):
+        LinearList.__init__(self)
+        self.middle = None
+
+    def add(self, data):
+        if self.size == 0 or data < self.head.data:
+            self.head = ListNode(data,self.head)
+        else:
+            q = self.head           
+            while q.next is not None and data > q.next.data:
+                q = q.next
+            q.next = ListNode(data,q.next)
+        self.size += 1
+
+        q = self.head
+
+        for i in range(int((self.size-1)/2)): q = q.next
+        self.middle = q
+
+        return True
+    
+    def median(self):
+        s = self.size
+        if s % 2 == 0: m = (self.middle.data+self.middle.next.data)/2
+        else: m = self.middle.data
+        return m
 
 class Stack(LinearList):
-
-    def __init__(self):
-        LinearList.__init__()
     
+    def __init__(self):
+        LinearList.__init__(self)
+
     def isEmpty(self):
         return super().isEmpty()
     
@@ -83,7 +113,7 @@ class Stack(LinearList):
         if (self.isEmpty): return None
         return self.remove(0)
 
-class Queue():
+class Queue:
 
     def __init__(self):
         self.front = None
@@ -170,6 +200,18 @@ class BinarySearchTree:
         if t.left is not None: self.inOrder(t.left)
         print(t.data,end = ',')
         if t.right is not None: self.inOrder(t.right)
+
+    def levelOrder(self):
+        node = self.root
+        
+        q = Queue()
+        
+        while node is not None:
+            print(node.info,end=" ")
+            if node.left is not None: q.queue(node.left)
+            if node.right is not None: q.queue(node.right)
+                
+            node = q.dequeue()
     
 class AvlTree(BinarySearchTree):
 
@@ -208,10 +250,12 @@ class AvlTree(BinarySearchTree):
         return t
 
     def insert(self, x, t):
+        
         if t is None:
             t = self.AvlNode()
             t.data = x
             t.height = 1
+        #super().levelOrder()
         if x == t.data:
             return t
         elif x < t.data:
@@ -272,7 +316,67 @@ class AvlTree(BinarySearchTree):
                 k -= 1
             return k
 
-class BinaryHeap():
+class BinaryDataHeap:
+    
+    def __init__(self,capacity):
+        self.capacity = capacity
+        self.size = 0
+        self.heap = [float('-inf')]+[float('-inf')]*capacity
+        self.data = [float('-inf')]+[float('-inf')]*capacity
+        #self.heap = [None]*capacity
+
+    def insert(self,key,data):
+        if self.size == self.capacity:
+            self.heap = self.heap + [float('-inf')]*self.capacity
+            self.data = self.data + [float('-inf')]*self.capacity
+            self.capacity *= 2
+        #sift up
+        sp = self.size + 1
+        while key < self.heap[int(sp/2)]:
+            self.heap[sp] = self.heap[int(sp/2)]
+            self.data[sp] = self.data[int(sp/2)]
+            sp = int(sp/2)
+        self.heap[sp] = key
+        self.data[sp] = data
+        self.size +=1
+        return True
+
+    def findMin(self):
+        if self.size > 0: return [self.heap[1],self.data[1]]
+        
+    def deleteMin(self):
+        if self.size < 1: return None
+
+        m = self.findMin()
+
+        self.heap[1] = self.heap[self.size]
+        self.data[1] = self.data[self.size]
+        self.heap[self.size] = 0
+        self.data[self.size] = 0
+        self.size -= 1
+
+        #sift down
+        hole = 1
+        tmp = self.heap[hole]
+        tmp2 = self.data[hole]
+
+        while hole*2 <= self.size:
+            child = hole*2
+            if hole*2+1 <= self.size and self.heap[child] > self.heap[child+1]:
+                child +=1
+            if self.heap[child] < tmp:
+                self.heap[hole] = self.heap[child]
+                self.data[hole] = self.data[child]
+            else: break
+
+            hole = child
+
+        self.heap[hole] = tmp
+        self.data[hole] = tmp2
+
+        return m
+
+class BinaryHeap:
     
     def __init__(self,capacity):
         self.capacity = capacity
@@ -281,36 +385,229 @@ class BinaryHeap():
         #self.heap = [None]*capacity
 
     def insert(self,x):
-        if self.size == self.capacity - 1: return False
+        if self.size == self.capacity-1:
+            self.heap = self.heap + [0]*self.capacity
+            self.capacity*=2
         #sift up
         sp = self.size + 1
-        #while x.priority < self.heap[int(sp/2)].priority:
         while x < self.heap[int(sp/2)]:
             self.heap[sp] = self.heap[int(sp/2)]
             sp = int(sp/2)
-        
         self.heap[sp] = x
+        self.size +=1
+        return True
+
+    def delete(self,x):
+        if self.size > 0:
+            for i in range(self.size):
+                if(self.heap[i+1] == x):
+                    sp = i+1
+                    break
+
+            while sp > 1:
+                self.heap[sp] = self.heap[int(sp/2)]
+                sp = int(sp/2)
+            
+            return self.deleteMin()
 
     def findMin(self):
-        if size > 0: return self.heap[1]
+        if self.size > 0: return self.heap[1]
         
     def deleteMin(self):
-        if size < 0: return None
+        if self.size < 1: return None
 
-        min = self.findMin()
+        m = self.findMin()
 
-        self.heap[1] = self.heap[self.size-1]
+        self.heap[1] = self.heap[self.size]
+        self.heap[self.size] = 0
         self.size -= 1
 
         #sift down
         hole = 1
-        tmp = self.heap[1]
-        while hole*2 < self.size:
-            child = hole*2
+        tmp = self.heap[hole]
 
-            if child != self.size and self.heap[child].priority > self.heap[child+1].priority: child +=1
-            if self.heap[child] < tmp: self.heap[hole] = self.heap.child
+        while hole*2 <= self.size:
+            child = hole*2
+            if hole*2+1 <= self.size and self.heap[child] > self.heap[child+1]:
+                child +=1
+            if self.heap[child] < tmp: self.heap[hole] = self.heap[child]
             else: break
+
+            hole = child
 
         self.heap[hole] = tmp
 
+        return m
+
+    def heapSort(self):
+        s = self.size
+        arr = []
+
+        for i in range(self.size):
+            arr.append(self.deleteMin())
+        
+        if s % 2 == 0: m = (arr[int(s/2)]+arr[int(s/2)-1])/2
+        else: m = arr[int(s/2)]
+
+        return m
+
+class HashNode:
+    def __init__(self,key,value):
+        self.key = key
+        self.value = value
+        self.next = None
+
+class HashMap:
+    def __init__(self,card):
+        self.size = 0
+        self.m = card
+        self.map = [None]*self.m
+        self.ps = [1645333507,2971215073,1073807359,2147483647,2521008887,1442968193,1500450271]
+        self.p = random.choice(self.ps)
+        self.a = random.randint(1,self.p-1)
+        self.b = random.randint(0,self.p-1)
+
+    def get(self,key):
+        index = self.getHash(key)
+        n = self.map[index]
+        if n is None: return
+        while n and n.key != key:
+            n = n.next
+        if n is not None: return n.value
+
+    def getHash(self,key):
+        return ((self.a*key+self.b)%self.p)%self.m
+
+    def add(self,key,value):
+        m = HashNode(key,value)
+        index = self.getHash(key)
+        n = self.map[index]
+
+        if n is None:
+            self.map[index] = m
+            self.size += 1
+        elif n.key == key:
+            n.value = value
+            self.size += 1
+        else:
+            while n.next is not None:
+                if n.key == key:
+                    n.value = value
+                    return
+                n = n.next
+            n.next = m
+            self.size+=1
+        
+        self.reHash()
+    
+    def delete(self,key):
+        index = self.getHash(key)
+        if self.map[index] is None: return
+        n = self.map[index]
+        if n.key == key:
+            self.map[index] = n.next
+            self.size-=1
+        while n.next and n.next.key != key:
+            n = n.next
+        if n.next is not None and n.next.key == key:
+            n.next = n.next.next
+            self.size-=1
+        
+    def reHash(self):
+        if self.size/self.m > 0.9:
+            self.p = random.choice(self.ps)
+            self.a = random.randint(1,self.p-1)
+            self.b = random.randint(0,self.p-1)
+            newMap = self.map
+            self.map = [None]*(2*self.m)
+            self.size = 0
+            self.m*=2
+            for o in newMap:
+                while o:
+                    self.add(o.key,o.value)
+                    self.size+=1
+                    o = o.next
+
+class StringHashMap:
+    def __init__(self,card,lenght):
+        self.size = 0
+        self.m = card
+        self.L = lenght
+        self.map = [None]*self.m
+        self.ps = [1645333507,2971215073,1073807359,2147483647,2521008887,1442968193,1500450271]
+        self.p = random.choice(self.ps)
+        self.x = random.randint(11,40)
+
+    def get(self,key):
+        index = self.getHash(key)
+        if self.map[index] is None: return None
+        n = self.map[index]
+        while n and n.key != key:
+            n = n.next
+        if n is not None: return n.value
+
+    def getHash(self,key):
+        h = 0
+        for i in reversed(key): 
+            h = (h*self.x + ord(i))%self.p
+        return h%self.m
+
+    def add(self,key,value):
+        m = HashNode(key,value)
+        index = self.getHash(key)
+        n = self.map[index]
+        if n is None:
+            self.map[index] = m
+            self.size += 1
+        elif n.key == key:
+            n.value = value
+            self.size += 1
+        else:
+            while n.next:
+                if n.key == key:
+                    n.value = value
+                    return
+                n = n.next
+            n.next = m
+            self.size+=1
+        
+        self.reHash()
+    
+    def delete(self,key):
+        index = self.getHash(key)
+        if self.map[index] is None: return
+        n = self.map[index]
+        if n.key == key:
+            self.map[index] = n.next
+            self.size-=1
+        while n.next and n.next.key != key:
+            n = n.next
+        if n.key == key:
+            n = n.next
+            self.size-=1
+        
+    def reHash(self):
+        if self.size/self.m > 0.9:
+            self.p = random.choice(self.ps)
+            self.x = random.randint(11,40)
+            newMap = self.map
+            self.map = [None]*(2*self.m)
+            self.size = 0
+            self.m*=2
+            for o in newMap:
+                while o:
+                    self.add(o.key,o.value)
+                    self.size+=1
+                    o = o.next
+
+if __name__ == "__main__":
+    import string
+    '''
+    for i in range(900000): usuarios.add(str(i)+''.join(random.choice(string.ascii_lowercase) for _ in range(6)),random.randint(1000100100, 9999899899))
+    c = 0
+    for i in usuarios.map:
+        if i is not None:
+            c+=1
+    print(usuarios.size/usuarios.m, len(usuarios.map), usuarios.size, usuarios.m, c)      
+    '''
+    
