@@ -228,24 +228,28 @@ class AvlTree(BinarySearchTree):
     def singleRotationR(self,t):
         temp = t.left
         t.left = temp.right
+        t.height = super().height(t)
         temp.right = t
+        temp.height = super().height(temp)
         t = temp
         return t
 
     def singleRotationL(self,t):
         temp = t.right
         t.right = temp.left
+        t.height = super().height(t)
         temp.left = t
+        temp.height = super().height(temp)
         t = temp
         return t
 
     def rotationLR(self,t):
-        t.right = self.singleRotationL(t.right)
+        t.left = self.singleRotationL(t.left)
         t = self.singleRotationR(t)
         return t
     
     def rotationRL(self,t):
-        t.left = self.singleRotationR(t.left)
+        t.right = self.singleRotationR(t.right)
         t = self.singleRotationL(t)
         return t
 
@@ -317,13 +321,11 @@ class AvlTree(BinarySearchTree):
             return k
 
 class BinaryDataHeap:
-    
     def __init__(self,capacity):
         self.capacity = capacity
         self.size = 0
-        self.heap = [float('-inf')]+[float('-inf')]*capacity
-        self.data = [float('-inf')]+[float('-inf')]*capacity
-        #self.heap = [None]*capacity
+        self.heap = [float('inf')]+[-1]*capacity
+        self.data = [float('inf')]+[-1]*capacity
 
     def insert(self,key,data):
         if self.size == self.capacity:
@@ -332,7 +334,7 @@ class BinaryDataHeap:
             self.capacity *= 2
         #sift up
         sp = self.size + 1
-        while key < self.heap[int(sp/2)]:
+        while key > self.heap[int(sp/2)]:
             self.heap[sp] = self.heap[int(sp/2)]
             self.data[sp] = self.data[int(sp/2)]
             sp = int(sp/2)
@@ -341,13 +343,13 @@ class BinaryDataHeap:
         self.size +=1
         return True
 
-    def findMin(self):
+    def findMax(self):
         if self.size > 0: return [self.heap[1],self.data[1]]
         
-    def deleteMin(self):
+    def deleteMax(self):
         if self.size < 1: return None
 
-        m = self.findMin()
+        m = self.findMax()
 
         self.heap[1] = self.heap[self.size]
         self.data[1] = self.data[self.size]
@@ -362,9 +364,9 @@ class BinaryDataHeap:
 
         while hole*2 <= self.size:
             child = hole*2
-            if hole*2+1 <= self.size and self.heap[child] > self.heap[child+1]:
+            if hole*2+1 <= self.size and self.heap[child] < self.heap[child+1]:
                 child +=1
-            if self.heap[child] < tmp:
+            if self.heap[child] > tmp:
                 self.heap[hole] = self.heap[child]
                 self.data[hole] = self.data[child]
             else: break
@@ -375,6 +377,18 @@ class BinaryDataHeap:
         self.data[hole] = tmp2
 
         return m
+    
+    def levelOrder(self):
+        n = 1
+        
+        q = Queue()
+        
+        while n is not None and self.heap[n] != -1:
+            print(self.heap[n],end=" ")
+            if 2*n < len(self.heap) and self.heap[2*n] != -1: q.queue(2*n)
+            if 2*n+1 < len(self.heap) and self.heap[2*n+1] != -1: q.queue(2*n+1)
+                
+            n = q.dequeue()
 
 class BinaryHeap:
     

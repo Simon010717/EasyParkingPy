@@ -70,7 +70,7 @@ class Ui_MainWindow(object):
         tDireccion= self.direccion.text()
         tTelefono= self.telefono.text()
 
-        info= [tCedula,tNickname,tPassword,tNombre,tApellido,tEdad,tPlaca,tEmail,tDireccion,tTelefono]
+        info= [tCedula,tNickname,tPassword,tNombre,tApellido,tEdad,tPlaca,str(self.ep.usuarios.get(self.cedUsuario).puntos),tEmail,tDireccion,tTelefono]
 
         if "" in info[0:6]:
             self.ErrorLabel.setText("*Todos los campos marcados son obligatorios")
@@ -82,7 +82,7 @@ class Ui_MainWindow(object):
         if r == 3:
             self.mainWindow.hide()
             self.mainWindow=QtWidgets.QMainWindow()
-            self.setupUiOpciones()
+            self.setupUiLogin()
             self.mainWindow.show()
         elif r == 2:
             self.ErrorLabel.setText("*Placa incorrecta. Debe ingresar una nueva placa")
@@ -117,13 +117,13 @@ class Ui_MainWindow(object):
         tDireccion= self.direccion.text()
         tTelefono= self.telefono.text()
 
-        info= [tCedula,tNickname,tPassword,tNombre,tApellido,tEdad,tPlaca,tEmail,tDireccion,tTelefono]
+        info= [tCedula,tNickname,tPassword,tNombre,tApellido,tEdad,tPlaca,"0",tEmail,tDireccion,tTelefono]
 
         if "" in info[0:6]:
             self.ErrorLabel.setText("*Todos los campos marcados son obligatorios")
             return
 
-        r = self.ep.addUsuarioArr(info,False)
+        r = self.ep.addUsuarioArr(info,self.ep.usuarios.size,False)
 
         if r == 3:
             self.mainWindow.hide()
@@ -968,11 +968,11 @@ class Ui_MainWindow(object):
             duracion = int(time.time()) -  e.tiempoInicio
             self.tiempo.setText("Tiempo total: "+str(timedelta(seconds=duracion)))
             self.total.setText("Valor total: $"+str(duracion))
-            puntos = duracion//10
-            u.puntos += puntos
+            puntos = duracion//100
+            u.puntos += puntos            
             self.divisor5.setText(str(u.puntos))
-
             p.desparqueo(u,self.ep.usuarios.get(self.cedUsuario).carro.esp[1])
+            self.ep.updateFile(self.cedUsuario)
 
     def setupUiParqueaderos(self):
 
@@ -1406,6 +1406,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUiEditarParq()
         QtCore.QMetaObject.connectSlotsByName(self.mainWindow)
+
+        #print(self.ep.puntos.findMax())
+        #self.ep.puntos.levelOrder()
 
     def retranslateUiEditarParq(self):
         _translate = QtCore.QCoreApplication.translate

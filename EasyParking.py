@@ -21,10 +21,11 @@ class Persona:
         self.tel = tel
 
 class Usuario(Persona):
-    def __init__(self, ced, nickname, password, nombre, apellido, edad, placa, puntos, email=None, direccion=None, tel=None):
+    def __init__(self, ced, nickname, password, nombre, apellido, edad, placa, puntos, email, direccion, tel, index):
         self.carro = Carro(placa)
         super().__init__(ced, nickname, password, nombre, apellido, edad, email, direccion, tel)
         self.puntos = int(puntos)
+        self.index = index
 
 class Espacio:
     def __init__ (self,cod,tiempoI,carro = None,libre = True):
@@ -45,15 +46,18 @@ class EasyParking:
         self.usuariosRoute = "usuarios.ep"
         self.parqueaderosRoute = "parqueaderos"
         self.empleadosRoute = "empleados.ep"
+
         self.usuarios = dt.HashMap(1000)
+        self.puntos = dt.BinaryDataHeap(1000)
         self.nicknames = dt.StringHashMap(1000,15)
         self.placas = dt.StringHashMap(1000,10)
         self.addUsuarios()
+
         self.parqueaderos = []
         self.addParqueaderos()
+
         self.empleados = dt.StringHashMap(1000,15)
         self.addEmpleados()
-        self.puntos = dt.BinaryHeap()
 
     def addParqueaderos(self):
         n = len(os.listdir(self.parqueaderosRoute))
@@ -98,9 +102,9 @@ class EasyParking:
         self.placas = dt.StringHashMap(int(1.12*n),self.placas.L)
 
         for i in range(n):
-            self.addUsuarioArr(data[i].rstrip('\n').split("*"),True)
+            self.addUsuarioArr(data[i].rstrip('\n').split("*"),i,True)
 
-    def addUsuarioArr(self,info,verified):
+    def addUsuarioArr(self,info,index,verified):
         if len(info) < 8: return None
         if not verified:
             check = self.checkInfoUsuario(info)
@@ -108,11 +112,12 @@ class EasyParking:
 
         line = '*'.join(info)
 
-        for i in range(len(info),10): info.append(None)
+        for i in range(len(info),11): info.append(None)
 
-        self.usuarios.add(int(info[0]),Usuario(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7],info[8],info[9],info[10]))
+        self.usuarios.add(int(info[0]),Usuario(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7],info[8],info[9],info[10],index))
         self.nicknames.add(info[1],int(info[0]))
         self.placas.add(info[6],int(info[0]))
+        self.puntos.insert(int(info[7]),int(info[0]))
         
         if not verified:
             with open(self.usuariosRoute,"a") as f:
@@ -132,8 +137,6 @@ class EasyParking:
         return 3
 
     def cambioInfo(self,info,oldCed):
-        print(oldCed)
-
         check = self.checkCambioInfo(info,oldCed)
         if check < 3: return check
 
@@ -142,17 +145,13 @@ class EasyParking:
         with open(self.usuariosRoute,"r") as f:
             data = f.readlines()
 
-        found = False
-        for i,l in enumerate(data):
-            if l.split("*")[0] == str(oldCed):
-                found = True
-                data[i] = line+'\n'
-                with open(self.usuariosRoute,"w") as f:
-                    f.writelines("".join(data))
-        if not found: return
+        i = self.usuarios.get(oldCed).index       
+        data[i] = line+'\n'
+        with open(self.usuariosRoute,"w") as f:
+            f.writelines("".join(data))
         
         if info[0] != str(oldCed):
-            self.usuarios.add(int(info[0]),Usuario(info[0],info[1],info[2],info[3],info[4],info[5],info[6],info[7],info[8],info[9]))
+            self.usuarios.add(int(info[0]),Usuario(info[0],info[1],info[2],info[3],info[4],info[5],info[6],int(info[7]),info[8],info[9],info[10],self.usuarios.get(oldCed).index))
             self.nicknames.delete(self.usuarios.get(oldCed).nickname)
             self.nicknames.add(info[1],int(info[0]))
             self.placas.delete(self.usuarios.get(oldCed).carro.placa)
@@ -231,6 +230,28 @@ class EasyParking:
     def buscarUsuario(self,ced):
         return self.usuarios.get(ced)
     
+    def updateFile(self,ced):
+        u = self.usuarios.get(ced)
+
+        if u is None: return
+
+        info = [u.ced,u.nickname,u.password,u.nombre,u.apellido,u.edad,u.carro.placa,str(u.puntos),"","",""]
+        if u.email is not None: info[8] = u.email
+        if u.direccion is not None: info[9] = u.direccion
+        if u.tel is not None: info[10] = u.tel
+
+        line = '*'.join(info)+'\n'
+
+        with open(self.usuariosRoute,"r") as f:
+            data = f.readlines()
+
+        data[u.index] = line
+
+        with open(self.usuariosRoute,"w") as f:
+            f.writelines(''.join(data))
+
+
+
 class Parqueadero:
 
     def __init__(self,nombre,cod,direccion,tel,gerente,totales,ocupados):
@@ -257,7 +278,8 @@ class Parqueadero:
                 with open(self.parqueaderosRoute+"/p"+str(inP),"r") as f:
                     data = f.readlines()
                 data[1]=data[1][0:e]+"1"+data[1][e+1:]
-                data.append(str(int(time.time()))+"*"+user.ced+"\n")
+                #data.append(str(int(time.time()))+"*"+user.ced+"\n")
+                data.insert(data[1].count("1",0,e)+2,str(int(time.time()))+"*"+user.ced+"\n")
                 with open(self.parqueaderosRoute+"/p"+str(inP),"w") as f:   
                     f.write("".join(data))
 
