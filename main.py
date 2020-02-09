@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'login.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.1
-#
-# WARNING! All changes made in this file will be lost!
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QDialog, QMainWindow, QWidget, QDesktopWidget, QLabel,QPushButton
 import EasyParking, random
@@ -216,13 +207,20 @@ class Ui_MainWindow(object):
         self.setupUiEleccion(inP) 
         self.mainWindow.show() 
 
-    def vaciarParq(self,p,inP):
-        for u in self.ep.usuarios:
-            if u.carro.enParqueo and u.carro.esp[0] == p.cod:
-                u.carro.enParqueo = False
-                u.carro.esp = None
-        p.vaciar(inP)
-        self.ocupadosLab.setText("Ocupados: 0")
+    def restaurarParq(self, inP):
+        self.ep.restaurarParqueadero(inP)
+
+    def vaciarParq(self,inP):
+        self.ep.vaciarParqueadero(inP)
+    
+    def refrescar(self):
+        self.mainWindow.hide()
+        self.mainWindow=QtWidgets.QMainWindow()
+        self.setupUiEditarParq()
+        self.mainWindow.show()
+
+    def agregarEsp(self,inP):
+        self.ep.parqueaderos[inP].agregarEspacios(inP)
 
     def setupUiLogin(self):
         self.mainWindow.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint,False)
@@ -628,9 +626,10 @@ class Ui_MainWindow(object):
         #botones
         self.regresarButton.clicked.connect(self.regresarOpciones)
         if self.cedUsuario > -1:
-            if not self.ep.usuarios.get(self.cedUsuario).carro.enParqueo: self.parquearButton.clicked.connect(self.parquearOpciones)
+            if not self.ep.usuarios.get(self.cedUsuario).carro.enParqueo:
+                self.parquearButton.clicked.connect(self.parquearOpciones)
+                self.modificarInfoButton.clicked.connect(self.modificarInfo)
             else: self.parquearButton.clicked.connect(self.facturaOpciones)
-        self.modificarInfoButton.clicked.connect(self.modificarInfo)
     
         self.retranslateUiOpciones()
         QtCore.QMetaObject.connectSlotsByName(self.mainWindow)
@@ -640,8 +639,9 @@ class Ui_MainWindow(object):
         self.mainWindow.setWindowTitle(_translate("self.mainWindow", "EasyParking"))
         if self.ep.usuarios.get(self.cedUsuario).carro.enParqueo:
             self.parquearButton.setText(_translate("self.mainWindow", "Factura"))
-        else: self.parquearButton.setText(_translate("self.mainWindow", "Parquear"))
-        self.modificarInfoButton.setText(_translate("self.mainWindow", "Modificar Información"))
+        else:
+            self.parquearButton.setText(_translate("self.mainWindow", "Parquear"))
+            self.modificarInfoButton.setText(_translate("self.mainWindow", "Modificar Información"))
         self.regresarButton.setText(_translate("self.mainWindow", "Regresar"))
 
     def setupUiFactura(self):
@@ -1136,16 +1136,24 @@ class Ui_MainWindow(object):
         self.mainWindow.setWindowFlag(QtCore.Qt.WindowMaximizeButtonHint,False)
 
         self.mainWindow.setObjectName("self.mainWindow")
-        self.mainWindow.resize(1101, 671)
+        self.mainWindow.resize(1101, 620)
         self.mainWindow.setStyleSheet("*{\n"
         "font-family: segoe ui;\n"
+        "}\n"
+        "QFrame{\n"
+        "background: #2B3446;\n"
+        "}\n"
+        "QGroupBox{\n"
+        "background: #2B3446;\n"
+        "border:none;\n"
+        "}\n"
+        "QScrollArea{\n"
+        "background: #2B3446;\n"
+        "border:none;\n"
         "}\n"
         "QLabel{\n"
         "font-size: 13px;\n"
         "color: white;\n"
-        "}\n"
-        "QFrame{\n"
-        "background: #2B3446;\n"
         "}\n"
         "QPushButton{\n"
         "color: white;\n"
@@ -1159,12 +1167,10 @@ class Ui_MainWindow(object):
         "color: #2B3446;\n"
         "background:white;\n"
         "}\n"
-        "QLineEdit{\n"
+        "#nombreEdit, #telEdit, #gerenteEdit, #direccionEdit {\n"
         "background:transparent;\n"
         "color: white;\n"
         "border: none;\n"
-        "border-bottom: 1px solid;\n"
-        "border-color: white;\n"
         "font-size: 18px;\n"
         "}\n"
         "#ErrorLabel{\n"
@@ -1172,12 +1178,11 @@ class Ui_MainWindow(object):
         "background: transparent;\n"
         "color: red\n"
         "}\n"
-        "QGroupBox{\n"
-        "background: #2B3446;\n"
-        "border:none;\n"
-        "}\n"
         "#codLab, #totalesLab, #ocupadosLab{\n"
         "font-size: 18px;\n"
+        "}\n"
+        "#maxPointsLab{\n"
+        "font-size: 24px;\n"
         "}\n"
         "#addButton, #undoButton, #redoButton{\n"
         "border:none\n"
@@ -1193,115 +1198,58 @@ class Ui_MainWindow(object):
         "color:white;\n"
         "line-color:white;\n"
         "}\n"
+        "QVBoxLayout{\n"
+        "border-style: solid;\n"
+        "border-color:white;\n"
+        "border-width: 2px;\n"
+        "}\n"
         "#guardar,#regresar{\n"
-        "font-weight: normal;\n"
         "color: #2B3446;\n"
         "background: white;\n"
         "font-size: 30px;\n"
         "border-radius: 15px;\n"
+        "font-weight: normal;\n"
         "}\n"
         "#guardar:hover,#regresar:hover{\n"
-        "font-weight: normal;\n"
         "color: white;\n"
+        "border-style: solid;\n"
+        "border-width: 1px;\n"
+        "border-color:white;\n"
+        "border-radius: 15px;\n"
         "background:#2B3446;\n"
-        "border: none;\n"
-        "}\n"
-        "QScrollArea{\n"
-        "border:none;\n"
         "}")
 
         self.centralwidget = QtWidgets.QWidget(self.mainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setGeometry(QtCore.QRect(0, 0, 1101, 671))
+        self.frame.setGeometry(QtCore.QRect(0, 0, 1101, 620))
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
-        
-        self.guardar = QtWidgets.QPushButton(self.frame)
-        self.guardar.setGeometry(QtCore.QRect(220, 600, 171, 51))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.guardar.sizePolicy().hasHeightForWidth())
-        self.guardar.setSizePolicy(sizePolicy)
-        self.guardar.setObjectName("guardar")
 
-        self.regresar = QtWidgets.QPushButton(self.frame)
-        self.regresar.setGeometry(QtCore.QRect(30, 600, 171, 51))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.regresar.sizePolicy().hasHeightForWidth())
-        self.regresar.setSizePolicy(sizePolicy)
-        self.regresar.setObjectName("regresar")
-        self.mainWindow.setCentralWidget(self.centralwidget)
-        
         self.scrollArea = QtWidgets.QScrollArea(self.frame)
-        self.scrollArea.setGeometry(QtCore.QRect(30, 70, 1041, 511))
+        self.scrollArea.setGeometry(QtCore.QRect(30, 30, 1041, 511))
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
-
-        self.vLayout = QtWidgets.QVBoxLayout()
-        self.vLayout.setContentsMargins(0, 7, 0, 7)
-        self.vLayout.setObjectName("vLayout")
 
         self.groupBox = QtWidgets.QGroupBox(self.scrollArea)
         self.groupBox.setGeometry(QtCore.QRect(0, 0, 1041, 551))
         self.groupBox.setObjectName("groupBox")
-        self.groupBox.setLayout(self.vLayout)
+        
+        self.vLayout = QtWidgets.QVBoxLayout(self.groupBox)
+        self.vLayout.setContentsMargins(0, 7, 0, 7)
+        self.vLayout.setSpacing(10)
+        self.vLayout.setObjectName("vLayout")
 
-        self.scrollArea.setWidget(self.groupBox)
-        self.scrollArea.setWidgetResizable(True)
-
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.addButton = QtWidgets.QPushButton()
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.addButton.sizePolicy().hasHeightForWidth())
-        self.addButton.setSizePolicy(sizePolicy)
-        self.addButton.setMinimumSize(QtCore.QSize(60, 60))
-        self.addButton.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("logo/addButton.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.addButton.setIcon(icon)
-        self.addButton.setIconSize(QtCore.QSize(40, 40))
-        self.addButton.setObjectName("addButton")
-        self.horizontalLayout_2.addWidget(self.addButton)
-        self.undoButton = QtWidgets.QPushButton()
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.undoButton.sizePolicy().hasHeightForWidth())
-        self.undoButton.setSizePolicy(sizePolicy)
-        self.undoButton.setMinimumSize(QtCore.QSize(60, 60))
-        self.undoButton.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("logo/undoButton.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.undoButton.setIcon(icon1)
-        self.undoButton.setIconSize(QtCore.QSize(40, 40))
-        self.undoButton.setObjectName("undoButton")
-        self.horizontalLayout_2.addWidget(self.undoButton)
-        self.redoButton = QtWidgets.QPushButton()
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.redoButton.sizePolicy().hasHeightForWidth())
-        self.redoButton.setSizePolicy(sizePolicy)
-        self.redoButton.setMinimumSize(QtCore.QSize(60, 60))
-        self.redoButton.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("logo/redoButton.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.redoButton.setIcon(icon2)
-        self.redoButton.setIconSize(QtCore.QSize(40, 40))
-        self.redoButton.setObjectName("redoButton")
-        self.horizontalLayout_2.addWidget(self.redoButton)
-        self.vLayout.addLayout(self.horizontalLayout_2)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        self.vLayout.addItem(spacerItem)
+        self.maxPointsLab = QtWidgets.QLabel()
+        font = QtGui.QFont()
+        font.setFamily("segoe ui")
+        font.setPointSize(8)
+        self.maxPointsLab.setFont(font)
+        self.maxPointsLab.setObjectName("maxPointsLab")
+        self.vLayout.addWidget(self.maxPointsLab)
+        u = self.ep.usuarios.get(self.ep.puntos.findMax()[1])
+        self.maxPointsLab.setText("Usuario estrella - "+u.nombre+" "+u.apellido+" - "+u.ced+" - "+str(self.ep.puntos.findMax()[0])+" puntos")
 
         for inP, p in enumerate(self.ep.parqueaderos):
             self.fLayout = QtWidgets.QFormLayout()
@@ -1331,16 +1279,16 @@ class Ui_MainWindow(object):
             self.label_7.setObjectName("label_7")
             self.fLayout.setWidget(12, QtWidgets.QFormLayout.LabelRole, self.label_7)
 
-            self.nombreEdit = QtWidgets.QLineEdit(p.nombre)
+            self.nombreEdit = QtWidgets.QLabel(p.nombre)
             self.nombreEdit.setObjectName("nombreEdit")
             self.fLayout.setWidget(5, QtWidgets.QFormLayout.FieldRole, self.nombreEdit)
 
-            self.telEdit = QtWidgets.QLineEdit(p.tel)
+            self.telEdit = QtWidgets.QLabel(p.tel)
             self.telEdit.setMinimumSize(QtCore.QSize(210, 0))
             self.telEdit.setObjectName("telEdit")
             self.fLayout.setWidget(10, QtWidgets.QFormLayout.LabelRole, self.telEdit)
 
-            self.gerenteEdit = QtWidgets.QLineEdit(p.gerente)
+            self.gerenteEdit = QtWidgets.QLabel(p.gerente)
             self.gerenteEdit.setObjectName("gerenteEdit")
             self.fLayout.setWidget(10, QtWidgets.QFormLayout.FieldRole, self.gerenteEdit)
             
@@ -1377,33 +1325,52 @@ class Ui_MainWindow(object):
             vaciarButton.b.setSizePolicy(sizePolicy)
             vaciarButton.b.setMinimumSize(QtCore.QSize(210, 0))
             vaciarButton.b.setObjectName("vaciarButton")
-            vaciarButton.connectVaciar(p)
+            vaciarButton.connectVaciar()
             self.fLayout.setWidget(5, QtWidgets.QFormLayout.LabelRole, vaciarButton.b)
-            '''
-            self.eliminarButton = QtWidgets.QPushButton("ELIMINAR")
-            self.eliminarButton.setMinimumSize(QtCore.QSize(210, 0))
-            self.eliminarButton.setObjectName("eliminarButton"+str(inP))
-            self.eliminarButton.clicked.connect(lambda: self.pp(inP))
-            self.fLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.eliminarButton)
-            self.eliminarButtons.append(self.eliminarButton)
-            '''
-            eliminarButton = DButton(self,"ELIMINAR",inP)
-            eliminarButton.b.setMinimumSize(QtCore.QSize(210, 0))
-            eliminarButton.b.setObjectName("eliminarButton"+str(inP))
-            eliminarButton.connectEliminar()
-            self.fLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, eliminarButton.b)
 
-            for i in range(4):
+            restaurarButton = DButton(self,"RESTAURAR",inP)
+            restaurarButton.b.setMinimumSize(QtCore.QSize(210, 0))
+            restaurarButton.b.setObjectName("restaurarButton"+str(inP))
+            restaurarButton.connectRestaurar()
+            self.fLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, restaurarButton.b)
+            
+            for i in range(2):
                 self.spLabel = QtWidgets.QLabel()
                 self.fLayout.addRow(self.spLabel)
-
+            
             self.vLayout.addLayout(self.fLayout)
+        
+        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.vLayout.addItem(spacerItem1)
 
+        self.scrollArea.setWidget(self.groupBox)
+        self.scrollArea.setWidgetResizable(True)
+
+        self.guardar = QtWidgets.QPushButton(self.frame)
+        self.guardar.setGeometry(QtCore.QRect(220, 550, 171, 51))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.guardar.sizePolicy().hasHeightForWidth())
+        self.guardar.setSizePolicy(sizePolicy)
+        self.guardar.setObjectName("guardar")
+        self.guardar.setText("Refrescar")
+
+        self.regresar = QtWidgets.QPushButton(self.frame)
+        self.regresar.setGeometry(QtCore.QRect(30, 550, 171, 51))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.regresar.sizePolicy().hasHeightForWidth())
+        self.regresar.setSizePolicy(sizePolicy)
+        self.regresar.setObjectName("regresar")
+        self.regresar.setText("Regresar")
+        
         #botones
         self.regresar.clicked.connect(self.regresarEditarParq)
+        self.guardar.clicked.connect(self.refrescar)
 
         self.mainWindow.setCentralWidget(self.centralwidget)
-
         self.retranslateUiEditarParq()
         QtCore.QMetaObject.connectSlotsByName(self.mainWindow)
 
@@ -1414,7 +1381,6 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         self.mainWindow.setWindowTitle(_translate("self.mainWindow", "EasyParking"))
         self.regresar.setText(_translate("self.mainWindow", "Regresar"))
-        self.guardar.setText(_translate("self.mainWindow", "Guardar"))
 
     def setupUiModificarInfo(self):
         u = self.ep.usuarios.get(self.cedUsuario)
@@ -1765,7 +1731,8 @@ class Ui_MainWindow(object):
 
     def pp(self,x):
         print(f"{x} pressed")
-  
+
+
 class DButton():
     def __init__ (self,mainWindow,text,x):
         self.mainWindow = mainWindow
@@ -1778,11 +1745,14 @@ class DButton():
     def connectAutoParq(self):
         self.b.clicked.connect(lambda: self.mainWindow.autoParqueo(self.x))
 
-    def connectVaciar(self,p):
-        self.b.clicked.connect(lambda: self.mainWindow.vaciarParq(p,self.x))
+    def connectVaciar(self):
+        self.b.clicked.connect(lambda: self.mainWindow.vaciarParq(self.x))
 
     def connectAgregarEsp(self):
-        self.b.clicked.connect(lambda: self.mainWindow.pp(self.x))
+        self.b.clicked.connect(lambda: self.mainWindow.agregarEsp(self.x))
+
+    def connectRestaurar(self):
+        self.b.clicked.connect(lambda: self.mainWindow.restaurarParq(self.x))
 
     def connectElegir(self,p):
         self.b.clicked.connect(lambda: self.mainWindow.elegirParq(p,self.x))

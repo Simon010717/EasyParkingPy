@@ -61,11 +61,18 @@ class EasyParking:
 
     def addParqueaderos(self):
         n = len(os.listdir(self.parqueaderosRoute))
-        for p in range(n):
-            with open(self.parqueaderosRoute+"/p"+str(p),"r") as f:
-                data = f.readlines()
+        p=0
+        while p<n:
+            try:
+                with open(self.parqueaderosRoute+"/p"+str(p),"r") as f:
+                    data = f.readlines()
+            except FileNotFoundError:
+                p+=1
+                continue
             data[0] = data[0].rstrip('\n')
-            self.addParqueadero(data[0].split('*'),True)
+            inf = data[0].split('*')
+            inf[5] = str(len(data[1])-1)
+            self.addParqueadero(inf,True)
             ocupados = []
             for b in range (len(data[1])):
                 if data[1][b] == '1': ocupados.append(b)
@@ -79,6 +86,7 @@ class EasyParking:
                     self.parqueaderos[p].parqueo(u,p,e,True)
                     self.parqueaderos[p].espacios[e].tiempoInicio = int(info[0])
                 l+=1
+            p+=1
     
     def addParqueadero(self,info,verified):
         if not verified:
@@ -249,7 +257,29 @@ class EasyParking:
 
         with open(self.usuariosRoute,"w") as f:
             f.writelines(''.join(data))
+    
+    def vaciarParqueadero(self,inP):
+        with open(self.parqueaderosRoute+"/p"+str(inP),"r") as f:
+            data = f.readlines()[2:]
 
+        for l in data:
+            ced = int(l.split("*")[1])
+            self.usuarios.get(ced).carro.enParqueo = False
+            self.usuarios.get(ced).carro.esp = None
+
+        p = self.parqueaderos[inP]
+        p.espaciosTree.makeEmpty()
+        p.espacios = [None]*p.totales
+        p.ocupados = 0
+        data = [p.nombre,p.cod,p.direccion,p.tel,p.gerente,str(p.totales),str(p.ocupados)]
+        data = "*".join(data) + "\n"
+        data += "0"*p.totales + "\n"
+        with open(self.parqueaderosRoute+"/p"+str(inP),"w") as f:
+            f.write(data)
+
+    def restaurarParqueadero(self,inP):
+        self.parqueaderos[inP].totales = 50
+        self.vaciarParqueadero(inP)
 
 
 class Parqueadero:
@@ -306,15 +336,18 @@ class Parqueadero:
 
             self.ocupados -= 1          
 
-    def vaciar(self,inP):
-        self.espaciosTree.makeEmpty()
-        self.espacios = [None]*self.totales
-        self.ocupados = 0
-        data = [self.nombre,self.cod,self.direccion,self.tel,self.gerente,str(self.totales),str(self.ocupados)]
-        data = "*".join(data) + "\n"
-        data += "0"*self.totales + "\n"
+    def agregarEspacios(self,inP):
+        self.espacios = self.espacios + [None]*10
+        self.totales+=10
+
+        with open(self.parqueaderosRoute+"/p"+str(inP),"r") as f:
+            data = f.readlines()
+        
+        data[1] = data[1].rstrip('\n')+"0"*10+'\n'
+
         with open(self.parqueaderosRoute+"/p"+str(inP),"w") as f:
-            f.write(data)
+            f.write(''.join(data))
+
 
 def main():
     ep = EasyParking()
