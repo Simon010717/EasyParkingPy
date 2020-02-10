@@ -33,7 +33,6 @@ class Espacio:
         self.tiempoInicio = tiempoI
         self.libre = libre
         self.carro = carro
-        self.reservas = dt.BinaryHeap(10)
 
 class Empleado:
     def __init__(self,nickname,password,nombre):
